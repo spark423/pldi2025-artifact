@@ -10,6 +10,8 @@
 #include "libm.h"
 #include "rounding.h"
 
+#define MAX_STRIDE 19u
+
 mpfr_t mval;
 int new_emin, new_emax;
 
@@ -44,8 +46,12 @@ unsigned long RunTestForExponent(int numExpBit, FILE* f, char* FuncName) {
     
     mpfr_init2(mval, bitlen - numExpBit);
     
+    // Run at most 64K at a time. That's still 5 * 22 * 7 * 64K = 50M tests
     unsigned long upperlimit = 1lu << (unsigned long)bitlen;
-    for (unsigned long count = 0; count < upperlimit; count += 1) {
+    unsigned long start = bitlen <= MAX_STRIDE ?
+                          0 : 1lu << (bitlen - MAX_STRIDE) - 1;
+    unsigned step = (bitlen > MAX_STRIDE) ? (1u << (bitlen - MAX_STRIDE)) : 1u;
+    for (unsigned long count = start; count < upperlimit; count += step) {
       float x = ConvertBinToFP((unsigned)count, numExpBit, bitlen); 
       for (int rnd_index = 0; rnd_index < 4; rnd_index++) {
         float_x oracleResult = {.f = MpfrResult(x, numExpBit, bitlen, mpfr_rnd_modes[rnd_index])};
@@ -57,19 +63,8 @@ unsigned long RunTestForExponent(int numExpBit, FILE* f, char* FuncName) {
       }
     }
     
-    if (wrongResult == 0) {
-      if (bitlen == numExpBit+24) {
-	fprintf(f, "Testing FP%u(%d exp bit): check    \n", bitlen, numExpBit);
-      } else { 
-	fprintf(f, "Testing FP%u(%d exp bit): check    \t", bitlen, numExpBit);
-      }
-    } else {
-      if (bitlen == numExpBit+24) {
-	fprintf(f, "Testing FP%u(%d exp bit): incorrect\t", bitlen, numExpBit);
-      } else {
-	fprintf(f, "Testing FP%u(%d exp bit): incorrect\t", bitlen, numExpBit);
-      }
-    }
+    if (wrongResult == 0) fprintf(f, "Testing FP%u(%d exp bit): check    \n", bitlen, numExpBit);
+    else fprintf(f, "Testing FP%u(%d exp bit): incorrect\n", bitlen, numExpBit);
     fflush(f);
     totalWrongResult += wrongResult;
     

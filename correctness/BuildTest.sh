@@ -2,7 +2,7 @@
 cd ../libm
 make -s clean
 make -s
-cd ../correctness_all
+cd ../correctness
 cd ourlibm
 make -s clean
 make -s
