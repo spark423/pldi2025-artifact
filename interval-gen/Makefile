@@ -2,10 +2,10 @@ CC = g++
 
 FLAGS  = -lmpfr -lgmp
 
-all:    Cosh-RN Cosh-RZ Cosh-MULTI Cospi-RN Cospi-RZ Cospi-MULTI CosP1-RN CosP2-RZ CosP2-MULTI CosP2-RN CosP2-RZ CosP2-MULTI \
-	Log-RN Log-RZ Log-MULTI Log-MULTI-FMA Log2-RN Log2-RZ Log2-MULTI Log10-RN Log10-RZ Log10-MULTI Log10-MULTI-FMA \
-	Exp-RN Exp-RZ Exp-MULTI Exp2-RN Exp2-RZ Exp2-MULTI Exp10-RN Exp10-RZ Exp10-MULTI \
-	Sinh-RN Sinh-RZ Sinh-MULTI Sinpi-RN Sinpi-RZ Sinpi-MULTI SinP1-RN SinP1-RZ SinP1-MULTI SinP2-RN SinP2-RZ SinP2-MULTI
+all:  Cosh-RN Cosh-RZ Cosh-MULTI Cospi-RN Cospi-RZ Cospi-MULTI CosSmall CosP1-RN CosP2-RZ CosP2-MULTI CosP2-RN CosP2-RZ CosP2-MULTI \
+  Log-RN Log-RZ Log-MULTI Log-MULTI-FMA Log2-RN Log2-RZ Log2-MULTI Log10-RN Log10-RZ Log10-MULTI Log10-MULTI-FMA \
+  Exp-RN Exp-RZ Exp-MULTI Exp2-RN Exp2-RZ Exp2-MULTI Exp10-RN Exp10-RZ Exp10-MULTI \
+  Sinh-RN Sinh-RZ Sinh-MULTI Sinpi-RN Sinpi-RZ Sinpi-MULTI SinSmall SinP1-RN SinP1-RZ SinP1-MULTI SinP2-RN SinP2-RZ SinP2-MULTI
 
 Cosh-RN: Cosh.cpp
 	$(CC) -O3 -frounding-math -fsignaling-nans -I../include Cosh.cpp -o Cosh-RN $(FLAGS)
@@ -30,6 +30,9 @@ Cospi-MULTI: Cospi.cpp
 
 Cospi-MULTI-FMA: Cospi.cpp
 	$(CC) -O3 -march=native -frounding-math -fsignaling-nans -DRNDZ -DMULTI -DFMA -I../include Cospi.cpp -o Cospi-MULTI $(FLAGS)
+
+CosSmall: CosSmall.cpp
+	$(CC) -O3 -frounding-math -fsignaling-nans -I../include CosSmall.cpp -o CosSmall $(FLAGS)
 
 CosP1-RN: CosP1.cpp
 	$(CC) -O3 -frounding-math -fsignaling-nans -I../include CosP1.cpp -o CosP1-RN $(FLAGS)
@@ -62,7 +65,7 @@ Exp-RZ: Exp.cpp
 	$(CC) -O3 -frounding-math -fsignaling-nans -DRNDZ -I../include Exp.cpp -o Exp-RZ $(FLAGS)
 
 Exp-MULTI: Exp.cpp
-	$(CC) -O3 -march=native -frounding-math -fsignaling-nans -DRNDZ -DMULTI -I../include Exp.cpp -o Exp-MULTI $(FLAGS)
+	$(CC) -O3 -frounding-math -fsignaling-nans -DRNDZ -DMULTI -I../include Exp.cpp -o Exp-MULTI $(FLAGS)
 
 Exp2-RN: Exp2.cpp
 	$(CC) -O3 -frounding-math -fsignaling-nans -I../include Exp2.cpp -o Exp2-RN $(FLAGS)
@@ -80,7 +83,7 @@ Exp10-RZ: Exp10.cpp
 	$(CC) -O3 -frounding-math -fsignaling-nans -DRNDZ -I../include Exp10.cpp -o Exp10-RZ $(FLAGS)
 
 Exp10-MULTI: Exp10.cpp
-	$(CC) -O3 -march=native -frounding-math -fsignaling-nans -DRNDZ -DMULTI -I../include Exp10.cpp -o Exp10-MULTI $(FLAGS)
+	$(CC) -O3 -frounding-math -fsignaling-nans -DRNDZ -DMULTI -I../include Exp10.cpp -o Exp10-MULTI $(FLAGS)
 
 Log-RN: Log.cpp
 	$(CC) -O3 -frounding-math -fsignaling-nans -I../include Log.cpp -o Log-RN $(FLAGS)
@@ -139,6 +142,9 @@ Sinpi-MULTI: Sinpi.cpp
 Sinpi-MULTI-FMA: Sinpi.cpp
 	$(CC) -O3 -march=native -frounding-math -fsignaling-nans -DRNDZ -DMULTI -DFMA -I../include Sinpi.cpp -o Sinpi-MULTI $(FLAGS)
 
+SinSmall: SinSmall.cpp
+	$(CC) -O3 -frounding-math -fsignaling-nans -I../include SinSmall.cpp -o SinSmall $(FLAGS)
+
 SinP1-RN: SinP1.cpp
 	$(CC) -O3 -frounding-math -fsignaling-nans -I../include SinP1.cpp -o SinP1-RN $(FLAGS)
 
@@ -164,4 +170,4 @@ SinP2-MULTI-FMA: SinP2.cpp
 	$(CC) -O3 -march=native -frounding-math -fsignaling-nans -DRNDZ -DMULTI -DFMA -I../include SinP2.cpp -o SinP2-MULTI-FMA $(FLAGS)
 
 clean:
-	rm -rf *-RN *-RZ *-MULTI *-FMA
+	rm -rf *-RN *-RZ *-MULTI *-FMA *Small *~

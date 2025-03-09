@@ -8,7 +8,7 @@
 #include <string>
 #include <unistd.h>
 
-#include "rlibm.h"
+#include "libm.h"
 
 using namespace std;
 int fileIndex = 0;
