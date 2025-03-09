@@ -1,10 +1,8 @@
 #!/bin/bash
-touch rounding_invariant_input_bounds_cospif.txt
-touch rounding_invariant_outputs_cospif.txt
-touch rlibm_cospif.txt
+touch cospif.txt
 echo -e "Rounding-invariant input bounds cospif"
-./ourlibm_cospif rounding_invariant_input_bounds_cospif.txt
+./ourlibm_cospif cospif.txt
 echo -e "Rounding-invariant outputs cospif"
-./ourlibm_cospif_rz rounding_invariant_outputs_cospif.txt
+./ourlibm_cospif_rz cospif.txt
 echo -e "RLIBM cospif with fesetround"
-./rlibm_cospif rlibm_cospif.txt
+./rlibm_cospif cospif.txt
