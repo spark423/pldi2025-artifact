@@ -1,6 +1,6 @@
 #include "mathhelper.h"
 
-double rlibm_sinhf_rz(float x) {
+double ourlibm_sinhf_rz(float x) {
   float_x fx;
   fx.f = x;
   int s = fx.x>>31;

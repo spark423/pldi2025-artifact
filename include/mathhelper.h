@@ -1,7 +1,7 @@
 #ifndef MATHHELPER_H
 #define MATHHELPER_H
 
-#include "rlibm.h"
+#include "libm.h"
 
 static inline double rz_add(double a, double b) {
   double_x ba = {.d=a};

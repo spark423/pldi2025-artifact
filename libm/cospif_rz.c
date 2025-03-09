@@ -1,6 +1,6 @@
 #include "mathhelper.h"
 
-double rlibm_cospif_rz(float x) {
+double ourlibm_cospif_rz(float x) {
   float_x fX;
   fX.f = x;
   fX.x &= 0x7FFFFFFF;

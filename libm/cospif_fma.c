@@ -1,6 +1,6 @@
-#include "rlibm.h"
+#include "libm.h"
 
-double rlibm_cospif_fma(float x) {
+double ourlibm_cospif_fma(float x) {
   float_x fX;
   fX.f = x;
   fX.x &= 0x7FFFFFFF;

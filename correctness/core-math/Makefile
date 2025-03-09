@@ -1,6 +1,6 @@
 CC = gcc
 
-funcs = cr_cosf cr_coshf cr_cospif cr_expf cr_exp2f cr_exp10f cr_logf cr_log2f cr_log10f cr_sinf cr_sinhf cr_sinpif
+funcs = cosf coshf cospif expf exp2f exp10f logf log2f log10f sinf sinhf sinpif
 
 src = $(patsubst %, %.c, $(funcs))
 obj = $(patsubst %, %, $(funcs))

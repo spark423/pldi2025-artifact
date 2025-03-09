@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include "mpfr.h"
 
-#include "rlibm.h"
+#include "libm.h"
 #include "rounding.h"
 
 mpfr_t mval;

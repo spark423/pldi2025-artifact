@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <x86intrin.h>
 
-#include "rlibm.h"
+#include "libm.h"
 
 void RunTest(char* filename) {
   unsigned long long time_total = 0;
