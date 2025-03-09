@@ -1,6 +1,6 @@
 #include "mathhelper.h"
 
-double rlibm_log10f_rz(float x) {
+double ourlibm_log10f_rz(float x) {
   float_x fix = {.f=x};
   int m = 0;
 

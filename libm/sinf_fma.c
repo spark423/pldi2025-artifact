@@ -1,6 +1,6 @@
-#include "rlibm.h"
+#include "libm.h"
 
-double rlibm_sinf_fma(float x) {
+double ourlibm_sinf_fma(float x) {
   float_x fX = {.f=x};
   uint32_t b = fX.x<<1;
   if (b < 0xff000000) {

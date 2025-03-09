@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "rlibm.h"
+#include "libm.h"
 
 enum RoundMode {RNE, RNN, RNP, RNZ};
 

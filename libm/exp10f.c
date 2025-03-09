@@ -1,6 +1,6 @@
-#include "rlibm.h"
+#include "libm.h"
 
-double rlibm_exp10f(float x) {
+double ourlibm_exp10f(float x) {
   float_x fx = {.f=x};
   if((fx.x & 0x7FFFFFFF) == 0) return 1.0;
   if(fx.x <= 0x335e5bd7) {

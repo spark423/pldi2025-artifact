@@ -3,7 +3,7 @@
 //y=0x1.71547652bd04ep+0 x^(1) + -0x1.71547697769fcp-1 x^(2) + 0x1.ec719b9ca88efp-2 x^(3) + -0x1.7204d1b62d1e3p-2 x^(4) + 0x1.4f5cdeeca214ep-2 x^(5)
 static double coeffs[] = {0x1.71547652bd04ep+0, -0x1.71547697769fcp-1, 0x1.ec719b9ca88efp-2, -0x1.7204d1b62d1e3p-2, 0x1.4f5cdeeca214ep-2};
 
-double rlibm_log2f_rz(float x) {
+double ourlibm_log2f_rz(float x) {
   float_x fix = {.f=x};
   int m = 0;
   if (__builtin_expect(x == 1.0, 0)) return 0.0;

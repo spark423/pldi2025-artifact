@@ -1,6 +1,6 @@
 #include "mathhelper.h"
 
-double rlibm_sinf_rz(float x) {
+double ourlibm_sinf_rz(float x) {
   float_x fX = {.f=x};
   uint32_t b = fX.x<<1;
   if (b < 0xff000000) {

@@ -1,8 +1,8 @@
 CC = gcc
 
-funcs = cosf coshf cospif expf exp2f exp10f logf log2f log10f sinf sinhf sinpif \
-	cosf_rz coshf_rz cospif_rz expf_rz exp2f_rz exp10f_rz logf_rz log2f_rz log10f_rz sinf_rz sinhf_rz sinpif_rz \
-	cosf_og coshf_og cospif_og expf_og exp2f_og exp10f_og logf_og log2f_og log10f_og sinf_og sinhf_og sinpif_og
+funcs = ourlibm_cosf ourlibm_coshf ourlibm_cospif ourlibm_expf ourlibm_exp2f ourlibm_exp10f ourlibm_logf ourlibm_log2f ourlibm_log10f ourlibm_sinf ourlibm_sinhf ourlibm_sinpif \
+	ourlibm_cosf_rz ourlibm_coshf_rz ourlibm_cospif_rz ourlibm_expf_rz ourlibm_exp2f_rz ourlibm_exp10f_rz ourlibm_logf_rz ourlibm_log2f_rz ourlibm_log10f_rz ourlibm_sinf_rz ourlibm_sinhf_rz ourlibm_sinpif_rz \
+	rlibm_cosf rlibm_coshf rlibm_cospif rlibm_expf rlibm_exp2f rlibm_exp10f rlibm_logf rlibm_log2f rlibm_log10f rlibm_sinf rlibm_sinhf rlibm_sinpif
 
 src = $(patsubst %, %.c, $(funcs))
 obj = $(patsubst %, %, $(funcs))
@@ -11,7 +11,7 @@ obj = $(patsubst %, %, $(funcs))
 all: $(obj)
 
 %: %.c
-	$(CC) -O3 -frounding-math -fsignaling-nans -I../include $^ ../libm/rlibm.a -lm -o $@
+	$(CC) -O3 -frounding-math -fsignaling-nans -I../include $^ ../libm/libm.a -lm -o $@
 
 clean:
 	rm -rf *.o $(funcs) *~  

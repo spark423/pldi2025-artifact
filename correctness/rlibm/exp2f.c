@@ -7,6 +7,6 @@ int main(int argc, char** argv) {
         printf("Usage: %s <log file>\n", argv[0]);
         exit(0);
     }
-    RunTest(argv[1], "Rounding-invariant input bounds exp2f");
+    RunTest(argv[1], "Original RLIBM exp2f");
     return 0;
 }

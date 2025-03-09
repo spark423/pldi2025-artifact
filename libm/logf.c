@@ -1,6 +1,6 @@
 #include "mathhelper.h"
 
-double rlibm_logf(float x) {
+double ourlibm_logf(float x) {
   float_x fix = {.f=x};
   int m = 0;
   if (__builtin_expect(x == 1.0, 0)) return 0.0;

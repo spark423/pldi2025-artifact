@@ -1,6 +1,6 @@
 #include "mathhelper.h"
 
-double rlibm_coshf_rz(float x) {
+double ourlibm_coshf_rz(float x) {
   float_x fx;
   fx.f = x;
   fx.x &= 0x7fffffff;

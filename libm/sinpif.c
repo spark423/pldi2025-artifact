@@ -1,6 +1,6 @@
-#include "rlibm.h"
+#include "libm.h"
 
-double rlibm_sinpif(float x) {
+double ourlibm_sinpif(float x) {
   float_x fX;
   fX.f = x;
   int s = fX.x>>31;

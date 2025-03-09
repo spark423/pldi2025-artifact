@@ -3,7 +3,7 @@
 //y=0x1.71547652bd03ap+0 x^(1) + -0x1.7154769765806p-1 x^(2) + 0x1.ec719b5f3dbcfp-2 x^(3) + -0x1.7204a86330348p-2 x^(4) + 0x1.4f537b3462a72p-2 x^(5)
 static double coeffs[] = {0x1.71547652bd03ap+0, -0x1.7154769765806p-1, 0x1.ec719b5f3dbcfp-2, -0x1.7204a86330348p-2, 0x1.4f537b3462a72p-2};
 
-double rlibm_log2f_fma(float x) {
+double ourlibm_log2f_fma(float x) {
   float_x fix = {.f=x};
   int m = 0;
   if (__builtin_expect(x == 1.0, 0)) return 0.0;

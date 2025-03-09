@@ -1,6 +1,6 @@
-#include "rlibm.h"
+#include "libm.h"
 
-double rlibm_coshf(float x) {
+double ourlibm_coshf(float x) {
   float_x fx;
   fx.f = x;
   fx.x &= 0x7fffffff;

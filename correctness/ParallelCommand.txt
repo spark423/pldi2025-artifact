@@ -1,0 +1,12 @@
+bash RunCos.sh
+bash RunCosh.sh
+bash RunCospi.sh
+bash RunExp.sh
+bash RunExp2.sh
+bash RunExp10.sh
+bash RunLog.sh
+bash RunLog2.sh
+bash RunLog10.sh
+bash RunSin.sh
+bash RunSinh.sh
+bash RunSinpi.sh
