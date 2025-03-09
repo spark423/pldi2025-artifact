@@ -13,4 +13,3 @@ echo -e "|  cospi(x)  |"
 ./rlibm/cospif_rz results/rlibm_cospif_rz.txt
 ./rlibm/cospif_og results/rlibm_cospif_og.txt
 ./core-math/cr_cospif results/core_math_cospif.txt
-./glibc/cospi results/glibc_double_cospi.txt

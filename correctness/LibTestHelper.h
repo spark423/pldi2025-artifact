@@ -10,10 +10,8 @@
 #include "rlibm.h"
 #include "rounding.h"
 
-#define MAX_STRIDE 17u
-
 mpfr_t mval;
-int default_emin, default_emax, new_emin, new_emax;
+int new_emin, new_emax;
 
 mpfr_rnd_t mpfr_rnd_modes[4] = {MPFR_RNDN, MPFR_RNDD, MPFR_RNDU, MPFR_RNDZ};
 int fenv_rnd_modes[4] = {FE_TONEAREST, FE_DOWNWARD, FE_UPWARD, FE_TOWARDZERO};
@@ -26,7 +24,6 @@ float MpfrResult(float x, int numExpBit, unsigned bitlen, mpfr_rnd_t rnd) {
   mpfr_set_emax(new_emax);
   int exact = mpfr_set_d(mval, x, MPFR_RNDZ);
   exact = mpfr_subnormalize(mval, exact, MPFR_RNDZ);
-
   exact = __MPFR_ELEM__(mval, mval, rnd);
   exact = mpfr_subnormalize(mval, exact, rnd);
   float result = mpfr_get_flt(mval, rnd);
@@ -42,8 +39,6 @@ unsigned long RunTestForExponent(int numExpBit, FILE* f, char* FuncName) {
     int bias = (1 << (numExpBit - 1)) - 1;
     int emax = (1 << numExpBit) - 1 - bias;
     
-    default_emin = mpfr_get_emin();
-    default_emax = mpfr_get_emax();
     new_emin = 1 - bias - ((int)bitlen - 1 - numExpBit) + 1;
     new_emax = emax;
     
@@ -99,7 +94,7 @@ void RunTest(char* logFile, char* FuncName) {
   FILE* f = fopen(logFile, "w");
   fprintf(f, "Function: %s\n", FuncName);
   printf("Function: %s\n", FuncName);
-  for (int i = 2; i <= 5; i++) {
+  for (int i = 2; i <= 8; i++) {
     RunTestForExponent(i, f, FuncName);
   }
   fclose(f);
