@@ -14,4 +14,4 @@ all: $(obj)
 	$(CC) -O3 -frounding-math -fsignaling-nans -I../include $^ ../libm/libm.a -lm -o $@
 
 clean:
-	rm -rf *.o $(funcs) *~  
+	rm -rf *.o $(funcs) *~ *.txt 
