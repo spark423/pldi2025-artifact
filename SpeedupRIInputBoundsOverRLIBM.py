@@ -26,6 +26,7 @@ for i in range(0, len(labels)-1) :
     fp.close()
 rlibm_time.append(sum(rlibm_time))
 
+speedup = []
 for i in range(0, len(labels)) :
     speedup.append(round(((rlibm_time[i] / ri_input_bounds_time[i])-1)*100))
 
