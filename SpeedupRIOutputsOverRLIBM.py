@@ -14,13 +14,13 @@ rlibm_time = []
 file_name = ["sinf.txt", "sinhf.txt", "sinpif.txt", "cosf.txt", "coshf.txt", "cospif.txt", "logf.txt", "log2f.txt", "log10f.txt", "expf.txt", "exp2f.txt", "exp10f.txt"]
 
 for i in range(0, len(labels)-1) :
-    fp = open("results/"+file_name[i], "r")
+    fp = open("overhead/"+file_name[i], "r")
     lines = fp.read().splitlines()
     ri_outputs_time.append(float(lines[1]))
     fp.close()
 ri_outputs_time.append(sum(ri_outputs_time))
 for i in range(0, len(labels)-1) :
-    fp = open("results/"+file_name[i], "r")
+    fp = open("overhead/"+file_name[i], "r")
     lines = fp.read().splitlines()
     rlibm_time.append(float(lines[2]))
     fp.close()
