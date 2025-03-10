@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "IntervalGen.h"
 #include "constants.h"
+#include "interval-gen/IntervalGen.h"
 
 #ifdef RNDZ
   int rnd = FE_TOWARDZERO;

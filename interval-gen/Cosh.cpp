@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #include "constants.h"
-#include "IntervalGenSinhCosh.h"
+#include "interval-gen/IntervalGenSinhCosh.h"
 
 #ifdef RNDZ
   int rnd = FE_TOWARDZERO;

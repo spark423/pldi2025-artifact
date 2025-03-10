@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "IntervalGenSinCos.h"
 #include "constants.h"
+#include "interval-gen/IntervalGenSinCos.h"
 
 #ifdef RNDZ
   int rnd = FE_TOWARDZERO;
