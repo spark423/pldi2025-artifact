@@ -142,7 +142,7 @@ void print_polyinfo(polynomial* p){
   printf("\n");
 }
 
-int create_polynomial(FILE* interval_file_fp){
+int create_polynomial(FILE* interval_file_fp, vector<int> powers){
 
   printf("EXIT_ON_THRESHOLD is %d\n", EXIT_ON_THRESHOLD);
   
@@ -173,14 +173,7 @@ int create_polynomial(FILE* interval_file_fp){
     intervals[i].ub = data_entry[2];
   }
 
-  //int powers[] = {0, 2, 4}; //cos small case + cos for cos, cosh, cospi, sin, sinh, sinpi
-  //int powers[] = {1, 3, 5}; //sin small case + sin for cos, cosh, cospi, sin, sinh, sinpi
-  //int powers[] = {0, 1, 2, 3, 4}; //exp
-  //int powers[] = {0, 1, 2, 3, 4, 5}; //exp2, exp10
-  int powers[] = {1, 2, 3, 4}; //log, log10 
-  //int powers[] = {1, 2, 3, 4, 5}; //log2 
-
-  int powers_size = sizeof(powers)/sizeof(powers[0]);
+  int powers_size = powers.size();
 
   /* sample size */
 

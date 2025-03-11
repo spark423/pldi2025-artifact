@@ -12,7 +12,7 @@ static inline double rndu_multiply(double a, double b)
   return -neg_prod;
 }
 
-polynomial* PolyFinder::solve_with_soplex(sample_data* sintervals, size_t ssize, int* power, int termsize) {
+polynomial* PolyFinder::solve_with_soplex(sample_data* sintervals, size_t ssize, vector<int> power, int termsize) {
   SoPlex mysoplex;
   mysoplex.setBoolParam(SoPlex::RATFACJUMP,true);
   mysoplex.setIntParam(SoPlex::SOLVEMODE,2);
@@ -554,8 +554,7 @@ size_t PolyFinder::compute_violated_indices(size_t* violated_indices, interval_d
   return num_violated_indices;
 }
 
-polynomial* PolyFinder::generate_polynomial(sample_data* sintervals, size_t ssize,
-			  int* power, int power_size, int max_tries, int multi){
+polynomial* PolyFinder::generate_polynomial(sample_data* sintervals, size_t ssize, vector<int> power, int power_size, int max_tries, int multi){
 
   for(int i = power_size - 1; i < power_size; i++){
     printf("Trying to generate a polynomial  with %d terms \n", i+1);

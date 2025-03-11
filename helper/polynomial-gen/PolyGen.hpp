@@ -45,7 +45,7 @@ typedef struct{
 
 typedef struct {
   int termsize;
-  int* power;
+  vector<int> power;
   double* coeffs;
 } polynomial;
 
@@ -56,11 +56,11 @@ typedef union {
 
 class PolyFinder { 
     public :
-    polynomial* solve_with_soplex(sample_data* sintervals, size_t ssize, int* power, int termsize);
+    polynomial* solve_with_soplex(sample_data* sintervals, size_t ssize, vector<int> power, int termsize);
     double poly_horner_evaluation(double x, polynomial* poly);
     double poly_evaluation(double x, polynomial* poly);
     bool poly_evaluation_multi(double x, polynomial* poly, double& poly_lb, double& poly_ub);
     bool validate_and_fix_intervals(sample_data* sintervals, size_t ssize, polynomial* poly, int multi);
     size_t compute_violated_indices(size_t* violated_indices, interval_data* intervals, size_t nentries, polynomial* poly, int multi);
-    polynomial* generate_polynomial(sample_data* sintervals, size_t ssize, int* power, int power_size, int max_tries, int multi);    
+    polynomial* generate_polynomial(sample_data* sintervals, size_t ssize, vector<int> power, int power_size, int max_tries, int multi);    
 };

@@ -9,9 +9,10 @@ int main(int argc, char** argv) {
       printf("Output: <header file> - the file containing coefficients\n");
   }
   */
-  
+  std::vector<int> powers({1, 2, 3, 4});
+
   FILE* interval_file = fopen(argv[1], "r");
-  create_polynomial(interval_file);  
+  create_polynomial(interval_file, powers);  
   fclose(interval_file);
   return 0;
 }
