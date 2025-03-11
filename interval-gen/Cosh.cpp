@@ -18,12 +18,6 @@
   bool multi = false;
 #endif
 
-#ifdef FMA
-  bool useFMA = true;
-#else
-  bool useFMA = false;
-#endif
-
 mpfr_t sinh_val, cosh_val, pi;
 
 bool ComputeSpecialCase(float x) {
@@ -82,18 +76,7 @@ int GetConsts(int N, double& sinhM, double& sinhH, double& coshM, double& coshH)
   return 0;
 }
 
-double OutputCompensationFMA(bool isOCLB, double sinhM, double sinhH, double coshM, double coshH, double sinLB, double sinUB, double cosLB, double cosUB) {
-  double sinhHM = __builtin_fma(sinhH, coshM, coshH*sinhM);
-  double coshHM = __builtin_fma(sinhH, sinhM, coshH*coshM);
-  if (isOCLB) {
-    return __builtin_fma(sinhHM, sinLB, coshHM*cosLB);
-  } else {
-    return __builtin_fma(sinhHM, sinUB, coshHM*cosUB);
-  }
-}
-
-double OutputCompensation(bool isOCLB, double sinhM, double sinhH, double coshM, double coshH, double sinLB, double sinUB, double cosLB, double cosUB, bool useFMA) {
-  if (useFMA) return OutputCompensationFMA(isOCLB, sinhM, sinhH, coshM, coshH, sinLB, sinUB, cosLB, cosUB);
+double OutputCompensation(bool isOCLB, double sinhM, double sinhH, double coshM, double coshH, double sinLB, double sinUB, double cosLB, double cosUB) {
   double sinhHM = sinhH*coshM+coshH*sinhM;
   double coshHM = sinhH*sinhM+coshH*coshM;
   if (isOCLB) {
@@ -122,7 +105,7 @@ int main(int argc, char** argv) {
   mpfr_init2(cosh_val, 600);
   mpfr_init2(pi, 600);
   mpfr_const_pi(pi, MPFR_RNDN);
-  CreateIntervalFile(argv[1], argv[2], argv[3], argv[4], 0x0, 0x80000000, multi, useFMA);
+  CreateIntervalFile(argv[1], argv[2], argv[3], argv[4], 0x0, 0x80000000, multi);
   mpfr_clears(sinh_val, cosh_val, pi, (mpfr_ptr) 0);
   return 0;
 }

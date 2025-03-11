@@ -23,7 +23,7 @@ int CosGuessInitialVal(double xp, double sinhM, double sinhH, double coshM, doub
 
 int GetConsts(int N, double& sinhM, double& sinhH, double& coshM, double& coshH);
 
-double OutputCompensation(bool isOCLB, double sinhM, double sinhH, double coshM, double coshH, double sinLB, double sinUB, double cosLB, double cosUB, bool useFMA);
+double OutputCompensation(bool isOCLB, double sinhM, double sinhH, double coshM, double coshH, double sinLB, double sinUB, double cosLB, double cosUB);
 
 int UpdateIntervals(bool isOCLB, double newSinLB, double newSinUB, double newCosLB, double newCosUB, double& sinLB, double& sinUB, double& cosLB, double& cosUB);
 
@@ -103,13 +103,13 @@ int Calc34RNOInterval(double y, double& lb, double& ub) {
   return 0;
 }  
 
-bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, double coshM, double coshH, double& sinLB, double& sinUB, double& cosLB, double& cosUB, double roundLB, double roundUB, bool multiRnd, bool useFMA) {  
+bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, double coshM, double coshH, double& sinLB, double& sinUB, double& cosLB, double& cosUB, double roundLB, double roundUB, bool multiRnd) {  
   int ogRnd = FE_TONEAREST;
   double_x dx1, dx2; 
   unsigned long long step;
   if (multiRnd) ogRnd = fegetround();
   if (multiRnd) fesetround(FE_DOWNWARD);
-  if (OutputCompensation(true, sinhM, sinhH, coshM, coshH, sinLB, sinUB, cosLB, cosUB, useFMA) < roundLB) {
+  if (OutputCompensation(true, sinhM, sinhH, coshM, coshH, sinLB, sinUB, cosLB, cosUB) < roundLB) {
     bool inBound = false;
     double test;
     step = 0x10000000000000llu;
@@ -120,7 +120,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
       else dx1.x -= step;
       if (dx2.d >= 0.0) dx2.x += step;
       else dx2.x -= step; 
-      test = OutputCompensation(true, sinhM, sinhH, coshM, coshH, dx1.d, sinUB, dx2.d, cosUB, useFMA);
+      test = OutputCompensation(true, sinhM, sinhH, coshM, coshH, dx1.d, sinUB, dx2.d, cosUB);
       if (roundLB <= test && test <= roundUB) {
 	UpdateIntervals(true, dx1.d, sinUB, dx2.d, cosUB, sinLB, sinUB, cosLB, cosUB);
 	inBound = true;
@@ -135,7 +135,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
 	dx2.d = cosLB;
 	if (dx2.d >= 0.0) dx2.x += step;
 	else dx2.x -= step;	
-	test = OutputCompensation(true, sinhM, sinhH, coshM, coshH, sinLB, sinUB, dx2.d, cosUB, useFMA);
+	test = OutputCompensation(true, sinhM, sinhH, coshM, coshH, sinLB, sinUB, dx2.d, cosUB);
 	if (roundLB <= test && test <= roundUB) {
 	  UpdateIntervals(true, sinLB, sinUB, dx2.d, cosUB, sinLB, sinUB, cosLB, cosUB);
 	  inBound = true;
@@ -151,7 +151,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
 	dx1.d = sinLB;
 	if (dx1.d >= 0.0) dx1.x += step;
 	else dx1.x -= step;	
-	test = OutputCompensation(true, sinhM, sinhH, coshM, coshH, dx1.d, sinUB, cosLB, cosUB, useFMA);
+	test = OutputCompensation(true, sinhM, sinhH, coshM, coshH, dx1.d, sinUB, cosLB, cosUB);
 	if (roundLB <= test && test <= roundUB) {
 	  UpdateIntervals(true, dx1.d, sinUB, cosLB, cosUB, sinLB, sinUB, cosLB, cosUB);
 	  inBound = true;
@@ -179,7 +179,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
       if (dx2.x < step) dx2.x = 0x8000000000000000 + step - dx2.x;
       else dx2.x -= step;
     } else dx2.x += step;
-    if (OutputCompensation(true, sinhM, sinhH, coshM, coshH, dx1.d, sinUB, dx2.d, cosUB, useFMA) >= roundLB) { 
+    if (OutputCompensation(true, sinhM, sinhH, coshM, coshH, dx1.d, sinUB, dx2.d, cosUB) >= roundLB) { 
       UpdateIntervals(true, dx1.d, sinUB, dx2.d, cosUB, sinLB, sinUB, cosLB, cosUB);
     } else {
       step /= 2;
@@ -192,7 +192,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
       if (dx2.x < step) dx2.x = 0x8000000000000000 + step - dx2.x;
       else dx2.x -= step;
     } else dx2.x += step;
-    if (OutputCompensation(true, sinhM, sinhH, coshM, coshH, sinLB, sinUB, dx2.d, cosUB, useFMA) >= roundLB) {
+    if (OutputCompensation(true, sinhM, sinhH, coshM, coshH, sinLB, sinUB, dx2.d, cosUB) >= roundLB) {
       UpdateIntervals(true, sinLB, sinUB, dx2.d, cosUB, sinLB, sinUB, cosLB, cosUB);
     } else {
       step /= 2;
@@ -205,14 +205,14 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
       if (dx1.x < step) dx1.x = 0x8000000000000000 + step - dx1.x;
       else dx1.x -= step;
     } else dx1.x += step; 
-    if (OutputCompensation(true, sinhM, sinhH, coshM, coshH, dx1.d, sinUB, cosLB, cosUB, useFMA) >= roundLB) {
+    if (OutputCompensation(true, sinhM, sinhH, coshM, coshH, dx1.d, sinUB, cosLB, cosUB) >= roundLB) {
       UpdateIntervals(true, dx1.d, sinUB, cosLB, cosUB, sinLB, sinUB, cosLB, cosUB);
     } else {
       step /= 2;
     }
   }
   if (multiRnd) fesetround(FE_UPWARD);
-  if (OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, sinUB, cosLB, cosUB, useFMA) > roundUB) { 
+  if (OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, sinUB, cosLB, cosUB) > roundUB) { 
     double test;
     bool inBound = false;
     step = 0x10000000000000llu;
@@ -227,7 +227,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
 	if (dx2.x < step) dx2.x = 0x8000000000000000 + step - dx2.x;
 	else dx2.x -= step;
       } else dx2.x += step;
-      test = OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, dx1.d, cosLB, dx2.d, useFMA);
+      test = OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, dx1.d, cosLB, dx2.d);
       if (roundLB <= test && test <= roundUB) {
 	UpdateIntervals(false, sinLB, dx1.d, cosLB, dx2.d, sinLB, sinUB, cosLB, cosUB);
 	inBound = true;
@@ -243,7 +243,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
 	  if (dx2.x < step) dx2.x = 0x8000000000000000 + step - dx2.x;
 	  else dx2.x -= step;
 	} else dx2.x += step;
-	test = OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, sinUB, cosLB, dx2.d, useFMA);
+	test = OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, sinUB, cosLB, dx2.d);
 	if (roundLB <= test && test <= roundUB) {
 	  UpdateIntervals(false, sinLB, sinUB, cosLB, dx2.d, sinLB, sinUB, cosLB, cosUB);
 	  inBound = true;
@@ -260,7 +260,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
 	  if (dx1.x < step) dx1.x = 0x8000000000000000 + step - dx1.x;
 	  else dx1.x -= step;
 	} else dx1.x += step;
-	test = OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, dx1.d, cosLB, cosUB, useFMA);
+	test = OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, dx1.d, cosLB, cosUB);
 	if (roundLB <= test && test <= roundUB) {
 	  UpdateIntervals(false, sinLB, dx1.d, cosLB, cosUB, sinLB, sinUB, cosLB, cosUB);
 	  inBound = true;
@@ -284,7 +284,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
     else dx1.x -= step;
     if (dx2.d >= 0.0) dx2.x += step;
     else dx2.x -= step;
-    if (OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, dx1.d, cosLB, dx2.d, useFMA) <= roundUB) {
+    if (OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, dx1.d, cosLB, dx2.d) <= roundUB) {
       UpdateIntervals(false, sinLB, dx1.d, cosLB, dx2.d, sinLB, sinUB, cosLB, cosUB);
     } else {
       step /= 2;
@@ -295,7 +295,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
     dx2.d = cosUB;
     if (dx2.d >= 0.0) dx2.x += step;
     else dx2.x -= step;
-    if (OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, sinUB, cosLB, dx2.d, useFMA) <= roundUB) {
+    if (OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, sinUB, cosLB, dx2.d) <= roundUB) {
       UpdateIntervals(false, sinLB, sinUB, cosLB, dx2.d, sinLB, sinUB, cosLB, cosUB);
     } else {
       step /= 2;
@@ -306,7 +306,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
     dx1.d = sinUB;
     if (dx1.d >= 0.0) dx1.x += step;
     else dx1.x -= step;
-    if (OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, dx1.d, cosLB, cosUB, useFMA) <= roundUB) {
+    if (OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinLB, dx1.d, cosLB, cosUB) <= roundUB) {
       UpdateIntervals(false, sinLB, dx1.d, cosLB, cosUB, sinLB, sinUB, cosLB, cosUB);
     } else {
       step /= 2;
@@ -324,7 +324,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double sinhM, double sinhH, 
   return true;
 }
 
-void ComputeReducedInterval(float_x inputX, double y, FILE* sinIntervals, FILE* cosIntervals, FILE* fdFail, bool multiRnd, bool useFMA) {
+void ComputeReducedInterval(float_x inputX, double y, FILE* sinIntervals, FILE* cosIntervals, FILE* fdFail, bool multiRnd) {
   if (ComputeSpecialCase(inputX.f)) return;
   double xp, sinhM, sinhH, coshM, coshH;
   int N = RangeReduction(inputX.f, xp);
@@ -334,7 +334,7 @@ void ComputeReducedInterval(float_x inputX, double y, FILE* sinIntervals, FILE* 
   double sinIntLB, sinIntUB, cosIntLB, cosIntUB;
   SinGuessInitialVal(xp, sinhM, sinhH, coshM, coshH, sinIntLB, sinIntUB);
   CosGuessInitialVal(xp, sinhM, sinhH, coshM, coshH, cosIntLB, cosIntUB);
-  bool success = CalcReducedInterval(inputX, xp, sinhM, sinhH, coshM, coshH, sinIntLB, sinIntUB, cosIntLB, cosIntUB, roundLB, roundUB, multiRnd, useFMA);
+  bool success = CalcReducedInterval(inputX, xp, sinhM, sinhH, coshM, coshH, sinIntLB, sinIntUB, cosIntLB, cosIntUB, roundLB, roundUB, multiRnd);
   if (!success) { 
     double data_entry[3];
     data_entry[0] = (double)inputX.f;
@@ -348,7 +348,7 @@ void ComputeReducedInterval(float_x inputX, double y, FILE* sinIntervals, FILE* 
     if (multiRnd) ogRnd = fegetround();
     double ogFinalLB, ogFinalUB, finalLB, finalUB;
     if (multiRnd) fesetround(FE_DOWNWARD);
-    ogFinalLB = OutputCompensation(true, sinhM, sinhH, coshM, coshH, sinIntLB, sinIntUB, cosIntLB, cosIntUB, useFMA);
+    ogFinalLB = OutputCompensation(true, sinhM, sinhH, coshM, coshH, sinIntLB, sinIntUB, cosIntLB, cosIntUB);
     sinIntLBX.d = sinIntLB;
     if (sinIntLB > 0.0) {
       intX.x = sinIntLBX.x - 1;
@@ -357,7 +357,7 @@ void ComputeReducedInterval(float_x inputX, double y, FILE* sinIntervals, FILE* 
     } else {
       intX.x = sinIntLBX.x + 1;
     }
-    finalLB = OutputCompensation(true, sinhM, sinhH, coshM, coshH, intX.d, sinIntUB, cosIntLB, cosIntUB, useFMA);
+    finalLB = OutputCompensation(true, sinhM, sinhH, coshM, coshH, intX.d, sinIntUB, cosIntLB, cosIntUB);
     if (ogFinalLB != finalLB && roundLB <= finalLB) {
       printf("Sin LB not minimal for count=%x\n", inputX.x);
       exit(0);
@@ -370,20 +370,20 @@ void ComputeReducedInterval(float_x inputX, double y, FILE* sinIntervals, FILE* 
     } else {
       intX.x = cosIntLBX.x + 1;
     }
-    finalLB = OutputCompensation(true, sinhM, sinhH, coshM, coshH, sinIntLB, sinIntUB, intX.d, cosIntUB, useFMA);
+    finalLB = OutputCompensation(true, sinhM, sinhH, coshM, coshH, sinIntLB, sinIntUB, intX.d, cosIntUB);
     if (ogFinalLB != finalLB && roundLB <= finalLB) {
       printf("Cos LB not minimal for count=%x\n", inputX.x);
       exit(0);
     }
     if (multiRnd) fesetround(FE_UPWARD);
-    ogFinalUB = OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinIntLB, sinIntUB, cosIntLB, cosIntUB, useFMA);
+    ogFinalUB = OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinIntLB, sinIntUB, cosIntLB, cosIntUB);
     sinIntUBX.d = sinIntUB; 
     if (sinIntUB >= 0.0) {
       intX.x = sinIntUBX.x + 1;
     } else {
       intX.x = sinIntUBX.x - 1;
     }
-    finalUB = OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinIntLB, intX.d, cosIntLB, cosIntUB, useFMA);
+    finalUB = OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinIntLB, intX.d, cosIntLB, cosIntUB);
     if (ogFinalUB != finalUB && finalUB <= roundUB) {
       printf("Sin UB not maximal for count=%x\n", inputX.x);
       exit(0);
@@ -394,7 +394,7 @@ void ComputeReducedInterval(float_x inputX, double y, FILE* sinIntervals, FILE* 
     } else {
       intX.x = cosIntUBX.x - 1;
     }
-    finalUB = OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinIntLB, sinIntUB, cosIntLB, intX.d, useFMA);
+    finalUB = OutputCompensation(false, sinhM, sinhH, coshM, coshH, sinIntLB, sinIntUB, cosIntLB, intX.d);
     if (ogFinalUB != finalUB && finalUB <= roundUB) {
       printf("Cos UB not maximal for count=%x\n", inputX.x);
       exit(0);
@@ -595,7 +595,7 @@ void SortIntervalFile(string source, string dest) {
   rename(tempFile1.c_str(), dest.c_str());
 }
 
-void CreateIntervalFile(char* sinIntervalFile, char* cosIntervalFile, char* failFile, char* oracleFile, unsigned long countLow, unsigned long long countHigh, bool multiRnd, bool useFMA) {
+void CreateIntervalFile(char* sinIntervalFile, char* cosIntervalFile, char* failFile, char* oracleFile, unsigned long countLow, unsigned long long countHigh, bool multiRnd) {
   if(access(sinIntervalFile, F_OK ) == 0 ) {
     printf("Reduced interval file for sin already exists. Exiting to be safe\n");
     exit(0);
@@ -635,7 +635,7 @@ void CreateIntervalFile(char* sinIntervalFile, char* cosIntervalFile, char* fail
     }
     inputX.x = count;
     size_t size = fread(&oracleResult, sizeof(double), 1, fd_oracle);
-    ComputeReducedInterval(inputX, oracleResult, fd_sin_int, fd_cos_int, fd_fail, multiRnd, useFMA);
+    ComputeReducedInterval(inputX, oracleResult, fd_sin_int, fd_cos_int, fd_fail, multiRnd);
   }
   printf("\n");
   fclose(fd_sin_int);

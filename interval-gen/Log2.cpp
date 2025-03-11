@@ -17,12 +17,6 @@
   bool multi = false;
 #endif
 
-#ifdef FMA
-  bool useFMA = true;
-#else
-  bool useFMA = false;
-#endif
-
 bool ComputeSpecialCase(float x) {
   float_x fx = {.f=x};
   if (fx.f == 0.0) {
@@ -63,7 +57,7 @@ double GuessInitialVal(double xp) {
   return log1p(xp)*ONEBYLN2;
 }
 
-double OutputCompensation(float x, double yp, bool useFMA) {  
+double OutputCompensation(float x, double yp) {  
   float_x fix, fit;
   int m = 0;
   fix.f = x;
@@ -87,7 +81,7 @@ int main(int argc, char** argv) {
     exit(0);
   }
   fesetround(rnd);
-  CreateIntervalFile(argv[1], argv[2], argv[3], 0x0, 0x80000000, multi, useFMA);
+  CreateIntervalFile(argv[1], argv[2], argv[3], 0x0, 0x80000000, multi);
   return 0;
 }
 

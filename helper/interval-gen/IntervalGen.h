@@ -19,7 +19,7 @@ double RangeReduction(float x);
 
 double GuessInitialVal(double xp);
 
-double OutputCompensation(float x, double yp, bool useFMA);
+double OutputCompensation(float x, double yp);
 
 uint64_t GetPredecessor(double_x y) {
   if (y.d == 0) {
@@ -97,13 +97,13 @@ int Calc34RNOInterval(double y, double& lb, double& ub) {
   return 0;
 }  
 
-bool CalcReducedInterval(float_x inputX, double xp, double& reducedLB, double& reducedUB, double roundLB, double roundUB, bool multiRnd, bool useFMA) { 
+bool CalcReducedInterval(float_x inputX, double xp, double& reducedLB, double& reducedUB, double roundLB, double roundUB, bool multiRnd) { 
   int ogRnd = FE_TONEAREST;
   double_x dx;
   unsigned long long step;
   if (multiRnd) ogRnd = fegetround();
   if (multiRnd) fesetround(FE_DOWNWARD);
-  if (OutputCompensation(inputX.f, reducedLB, useFMA) < roundLB) { 
+  if (OutputCompensation(inputX.f, reducedLB) < roundLB) { 
     double test;
     step = 0x10000000000000llu;
     bool inBound = false;
@@ -114,7 +114,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double& reducedLB, double& r
 	if ((dx.x&0x7fffffffffffffff) < step) dx.x = 0x8000000000000000 + step - dx.x;
 	else dx.x -= step;
       }
-      test = OutputCompensation(inputX.f, dx.d, useFMA);
+      test = OutputCompensation(inputX.f, dx.d);
       if (roundUB < test) {
 	step /= 2;
       } else {
@@ -138,14 +138,14 @@ bool CalcReducedInterval(float_x inputX, double xp, double& reducedLB, double& r
       if (dx.x < step) dx.x = 0x8000000000000000 + step - dx.x;
       else dx.x -= step;
     } else dx.x += step;
-    if (OutputCompensation(inputX.f, dx.d, useFMA) >= roundLB) {
+    if (OutputCompensation(inputX.f, dx.d) >= roundLB) {
       reducedLB = dx.d;
     } else {
       step /= 2;
     }
   }
   if (multiRnd) fesetround(FE_UPWARD);
-  if (OutputCompensation(inputX.f, reducedUB, useFMA) > roundUB) { 
+  if (OutputCompensation(inputX.f, reducedUB) > roundUB) { 
     double test;
     step = 0x10000000000000llu;
     bool inBound = false;
@@ -155,7 +155,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double& reducedLB, double& r
 	if (dx.x < step) dx.x = 0x8000000000000000 + step - dx.x;
 	else dx.x -= step;
       } else dx.x += step;
-      test = OutputCompensation(inputX.f, dx.d, useFMA);
+      test = OutputCompensation(inputX.f, dx.d);
       if (test < roundLB) {
 	step /= 2;
       } else {
@@ -180,7 +180,7 @@ bool CalcReducedInterval(float_x inputX, double xp, double& reducedLB, double& r
       if ((dx.x&0x7fffffffffffffff) < step) dx.x = 0x8000000000000000 + step - dx.x;
       else dx.x -= step;
     }
-    if (OutputCompensation(inputX.f, dx.d, useFMA) <= roundUB) {
+    if (OutputCompensation(inputX.f, dx.d) <= roundUB) {
       reducedUB = dx.d;
     } else {
       step /= 2;
@@ -194,13 +194,13 @@ bool CalcReducedInterval(float_x inputX, double xp, double& reducedLB, double& r
   return true;
 }
 
-void ComputeReducedInterval(float_x inputX, double y, FILE* fdIntervals, FILE* fdFail, bool multiRnd, bool useFMA) {
+void ComputeReducedInterval(float_x inputX, double y, FILE* fdIntervals, FILE* fdFail, bool multiRnd) {
   if (ComputeSpecialCase(inputX.f)) return;
   double xp = RangeReduction(inputX.f);
   double roundLB, roundUB;
   Calc34RNOInterval(y, roundLB, roundUB);
   double intLB = GuessInitialVal(xp), intUB = GuessInitialVal(xp);
-  bool success = CalcReducedInterval(inputX, xp, intLB, intUB, roundLB, roundUB, multiRnd, useFMA);
+  bool success = CalcReducedInterval(inputX, xp, intLB, intUB, roundLB, roundUB, multiRnd);
   if (!success) {
     double data_entry[3];
     data_entry[0] = (double)inputX.f;
@@ -222,7 +222,7 @@ void ComputeReducedInterval(float_x inputX, double y, FILE* fdIntervals, FILE* f
     } else {
       intX.x = intLBX.x + 1;
     }
-    finalEval = OutputCompensation(inputX.f, intX.d, useFMA);
+    finalEval = OutputCompensation(inputX.f, intX.d);
     if (finalEval >= roundLB) {
       printf("LB not minimal for count=%x\n", inputX.x);
       exit(0);
@@ -236,7 +236,7 @@ void ComputeReducedInterval(float_x inputX, double y, FILE* fdIntervals, FILE* f
     } else {
       intX.x = intUBX.x - 1;
     }
-    finalEval = OutputCompensation(inputX.f, intX.d, useFMA);
+    finalEval = OutputCompensation(inputX.f, intX.d);
     if (finalEval <= roundUB) {
       printf("UB not maximal for count=%x\n", inputX.x);
       exit(0);
@@ -433,7 +433,7 @@ void SortIntervalFile(string source, string dest) {
   rename(tempFile1.c_str(), dest.c_str());
 }
 
-void CreateIntervalFile(char* intervalFile, char* failFile, char* oracleFile, unsigned long countLow, unsigned long long countHigh, bool multiRnd, bool useFMA) {
+void CreateIntervalFile(char* intervalFile, char* failFile, char* oracleFile, unsigned long countLow, unsigned long long countHigh, bool multiRnd) {
   if(access(intervalFile, F_OK ) == 0 ) {
     printf("Reduced interval file already exists. Exiting to be safe\n");
     exit(0);
@@ -466,7 +466,7 @@ void CreateIntervalFile(char* intervalFile, char* failFile, char* oracleFile, un
     }
     inputX.x = count;
     size_t size = fread(&oracleResult, sizeof(double), 1, fd_oracle);
-    ComputeReducedInterval(inputX, oracleResult, fd_int, fd_fail, multiRnd, useFMA);
+    ComputeReducedInterval(inputX, oracleResult, fd_int, fd_fail, multiRnd);
   }
   printf("\n");
   fclose(fd_int);

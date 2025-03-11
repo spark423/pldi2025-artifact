@@ -18,18 +18,6 @@
   bool multi = false;
 #endif
 
-#ifdef FMA
-  bool useFMA = true;
-#else
-  bool useFMA = false;
-#endif
-
-#ifdef FILTER
-  bool filter = true;
-#else
-  bool filter = false;
-#endif
-
 mpfr_t sinpi, cospi, pi;
 
 bool ComputeSpecialCase(float x) {
@@ -106,32 +94,7 @@ int GetConsts(int N, double& sinpiK, double& cospiK) {
   return 0;
 }
 
-double OutputCompensationFMA(bool isOCLB, double sinpiK, double cospiK, double sinLB, double sinUB, double cosLB, double cosUB) {
-  if (isOCLB) {
-    if (0.0<=sinpiK && 0.0<=cospiK) {
-      return __builtin_fma(cospiK, cosLB, -sinpiK*sinUB);
-    } else if (0.0<=sinpiK && cospiK<0.0) {
-      return __builtin_fma(cospiK, cosUB, -sinpiK*sinUB);
-    } else if (sinpiK<0.0 && 0.0<=cospiK) {
-      return __builtin_fma(cospiK, cosLB, -sinpiK*sinLB);
-    } else {
-      return __builtin_fma(cospiK, cosUB, -sinpiK*sinLB);
-    }
-  } else {
-    if (0.0<=sinpiK && 0.0<=cospiK) {
-      return __builtin_fma(cospiK, cosUB, -sinpiK*sinLB);
-    } else if (0.0<=sinpiK && cospiK<0.0) {
-      return __builtin_fma(cospiK, cosLB, -sinpiK*sinLB);
-    } else if (sinpiK<0.0 && 0.0<=cospiK) {
-      return __builtin_fma(cospiK, cosUB, -sinpiK*sinUB);
-    } else {
-      return __builtin_fma(cospiK, cosLB, -sinpiK*sinUB);
-    }
-  }
-}
-
-double OutputCompensation(bool isOCLB, double sinpiK, double cospiK, double sinLB, double sinUB, double cosLB, double cosUB, bool useFMA) {
-  if (useFMA) return OutputCompensationFMA(isOCLB, sinpiK, cospiK, sinLB, sinUB, cosLB, cosUB);
+double OutputCompensation(bool isOCLB, double sinpiK, double cospiK, double sinLB, double sinUB, double cosLB, double cosUB) {
   if (isOCLB) {
     if (0.0<=sinpiK && 0.0<=cospiK) {
       return cospiK*cosLB-sinpiK*sinUB;
@@ -190,7 +153,7 @@ int main(int argc, char** argv) {
   mpfr_init2(cospi, 600);
   mpfr_init2(pi, 600);
   mpfr_const_pi(pi, MPFR_RNDN);
-  CreateIntervalFile(argv[1], argv[2], argv[3], argv[4], 0x0, 0x80000000, multi, useFMA);
+  CreateIntervalFile(argv[1], argv[2], argv[3], argv[4], 0x0, 0x80000000, multi);
   mpfr_clears(sinpi, cospi, pi, (mpfr_ptr) 0);
   return 0;
 }
