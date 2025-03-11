@@ -1,23 +1,17 @@
-#define SOPLEX_WITH_GMP
-#pragma STDC FENV_ACCESS ON
-#include <fenv.h>
-#include <fstream>
-#include <math.h>
-#include <memory>
-#include <random>
-#include <soplex.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "PolyGen.hpp"
 
-#define MAX_TRIES 200
-#define VIOLATE_THRESHOLD 25
-#define SAMPLE_MATCH_THRESHOLD 25
-#define MAX_ITERATIONS 1200
-
-#ifdef RNDZ
+#if defined(RNDZ)
 const int rnd = FE_TOWARDZERO;
+#elif defined(MULTI)
+const int rnd = FE_DOWNWARD;
 #else
 const int rnd = FE_TONEAREST;
+#endif
+
+#ifdef MULTI
+const int multi = 1;
+#else
+const int multi = 0;
 #endif
 
 #ifdef EXIT_ON_THRESHOLD
@@ -25,125 +19,6 @@ const int EXIT_ON_THRESHOLD = 1;
 #else
 const int EXIT_ON_THRESHOLD = 0;
 #endif
-
-using namespace soplex;
-using namespace std;
-
-size_t prev_successful_degree = 0;
-
-typedef struct {
-  double x;         /* original input */
-  double lb;        /* lower bound */
-  double ub;        /* upper bound */
-  double w;         /* weight */
-  double u;         /* uniform random value */
-} interval_data;
-
-typedef struct{
-  double x;
-  double lb;
-  double ub;
-  double orig_lb;  /* remember lb before narrowing */
-  double orig_ub;  /* remember ub before narrowing */
-  double w;
-  double u;
-  double k;        /* key computed as 1/u^w */
-
-} sample_data;
-
-typedef struct{
-  double key;
-  size_t index;
-} sample_info;
-
-typedef struct {
-  int termsize;
-  int* power;
-  double* coeffs;
-} polynomial;
-
-typedef union {
-  double d;
-  uint64_t x;
-} double_x;
-
-
-polynomial* solve_with_soplex(sample_data* sintervals, size_t ssize, int* power, int termsize) {
-  SoPlex mysoplex;
-  mysoplex.setBoolParam(SoPlex::RATFACJUMP,true);
-  mysoplex.setIntParam(SoPlex::SOLVEMODE,2);
-  mysoplex.setIntParam(SoPlex::CHECKMODE,2);
-  mysoplex.setIntParam(SoPlex::SYNCMODE,1);
-  mysoplex.setIntParam(SoPlex::READMODE,1);
-  mysoplex.setRealParam(SoPlex::FEASTOL,0.0);
-  mysoplex.setRealParam(SoPlex::OPTTOL,0.0);
-  mysoplex.setRealParam(SoPlex::EPSILON_ZERO,0.0);
-  mysoplex.setRealParam(SoPlex::EPSILON_FACTORIZATION,0.0);
-  mysoplex.setRealParam(SoPlex::EPSILON_UPDATE,0.0);
-  mysoplex.setRealParam(SoPlex::EPSILON_PIVOT,0.0);
-  mysoplex.setIntParam(SoPlex::VERBOSITY,0);
-  mysoplex.setRealParam(SoPlex::TIMELIMIT,5*60);
-  
-  /* we first add objective variables */
-  DSVectorRational dummycol(0);
-  for(int i=0;i<termsize;i++){
-    auto column=LPColRational(1.0,dummycol,infinity,-infinity);
-    mysoplex.addColRational(column);
-  }
-  
-  /* then add constraints one by one */
-  for(int i = 0; i < ssize; i++){
-    Rational xValR(sintervals[i].x);
-    DSVectorRational row1(termsize);
-    
-    for(int j=0; j<termsize;j++){
-      Rational toAdd(1.0);
-      for(int k=0;k<power[j];k++) toAdd*=xValR;
-
-      row1.add(j,toAdd);
-    }
-        
-    // LPRow: low bound, row, upper bound
-    double lbnd= sintervals[i].lb;
-    double ubnd= sintervals[i].ub;
-    mysoplex.addRowRational(LPRowRational(lbnd,row1,ubnd));
-  }
-
-  /* solve LP */
-  SPxSolver::Status stat;
-  stat=mysoplex.optimize();
-  
-  /* get solution */
-  if(stat==SPxSolver::OPTIMAL){
-    DVectorRational prim(termsize);
-    mysoplex.getPrimalRational(prim);
-
-    /* generate the polynomial as a plain structure */
-    polynomial* p = (polynomial *) calloc(1, sizeof(polynomial));
-    p->termsize = termsize;
-    p->power = power;
-    p->coeffs = (double *) calloc(termsize, sizeof(double));
-    
-    for(int i=0;i<termsize;i++)
-      p->coeffs[i] = mpq_get_d(*(prim[i].getMpqPtr_w()));
-
-    return p;
-  }
-  else if(stat==SPxSolver::UNBOUNDED){
-
-    polynomial* p = (polynomial *) calloc(1, sizeof(polynomial));
-    p->termsize = termsize;
-    p->power = power;
-    p->coeffs = (double *) calloc(termsize, sizeof(double));
-    
-    for(int i=0;i<termsize;i++)
-      p->coeffs[i] = 0.0;
-    
-    return p;
-  }
-  
-  return nullptr;
-}
 
 void check_sorted(sample_info* sampled_indices, size_t ssize){
   double min= sampled_indices[0].key;
@@ -153,139 +28,6 @@ void check_sorted(sample_info* sampled_indices, size_t ssize){
     min = sampled_indices[i].key;
   }
   
-}
-
-double poly_horner_evaluation(double x, polynomial* poly){
-
-  double ret_val = 0.0;
-
-  // simulated Horner's method
-  for(int i = poly->termsize-1; i> 0; i--){
-    ret_val = ret_val + poly->coeffs[i];
-    double xmul = 1.0;
-    for(int j = 0; j < (poly->power[i] - poly->power[i-1]); j++){
-      xmul = xmul * x;
-    }
-    ret_val = ret_val * xmul;	  
-  }
-  ret_val = ret_val + poly->coeffs[0];
-  
-  for(int j = 0; j < poly->power[0]; j++){
-    ret_val = ret_val * x;
-  }  
-  return ret_val;
-}
-
-double poly_evaluation(double x, polynomial* poly) {
-  if (poly->termsize == 3) {
-    if (poly->power[2] == 5) {
-      double x2 = x*x;
-      double tmp = x2*poly->coeffs[2]+poly->coeffs[1];
-      return x*(x2*tmp+poly->coeffs[0]);
-    } else {
-      double x2 = x*x;
-      double tmp = x2*poly->coeffs[2]+poly->coeffs[1];
-      return x2*tmp+poly->coeffs[0];
-    } 
-  } else if (poly->termsize == 4) { 
-    if (poly->power[3] == 4) {
-      double x2 = x*x;
-      double tmp1 = x*poly->coeffs[1]+poly->coeffs[0];
-      double tmp2 = x*poly->coeffs[3]+poly->coeffs[2];
-      double tmp3 = x2*tmp2+tmp1;
-      return x*tmp3;
-    } else { 
-      double x2 = x*x;
-      double tmp1 = x*poly->coeffs[1]+poly->coeffs[0];
-      double tmp2 = x*poly->coeffs[3]+poly->coeffs[2];
-      double tmp3 = x2*tmp2+tmp1;
-      return tmp3;
-    } 
-  } else if (poly->termsize == 5) {
-    if (poly->power[4] == 5) {
-      double x2 = x*x;
-      double tmp1 = x*poly->coeffs[4]+poly->coeffs[3];
-      double tmp2 = x*poly->coeffs[2]+poly->coeffs[1];
-      double tmp3 = x2*tmp1+tmp2;
-      double tmp4 = x2*tmp3;
-      double tmp5 = x*poly->coeffs[0];
-      return tmp4+tmp5;
-    } else {
-      double x2 = x*x;
-      double tmp1 = x*poly->coeffs[1]+poly->coeffs[0];
-      double tmp2 = x*poly->coeffs[3]+poly->coeffs[2];
-      double tmp3 = x2*poly->coeffs[4]+tmp2;
-      double tmp4 = x2*tmp3+tmp1;
-      return tmp4;
-    }
-  } else if (poly->termsize==6) { 
-    double x2 = x*x;
-    double tmp1 = poly->coeffs[1]*x+poly->coeffs[0];
-    double tmp2 = poly->coeffs[3]*x+poly->coeffs[2];
-    double tmp3 = poly->coeffs[5]*x+poly->coeffs[4];
-    double tmp4 = tmp3*x2+tmp2;
-    double tmp5 = tmp4*x2+tmp1;
-    return tmp5;
-  } 
-  return poly_horner_evaluation(x,poly);
-}
-
-bool validate_and_fix_intervals(sample_data* sintervals,
-				      size_t ssize, polynomial* poly){
-
-  bool return_val = true;
-  for(size_t i = 0; i < ssize; i++){
-    double y = poly_evaluation(sintervals[i].x, poly);
-
-    if(y < sintervals[i].orig_lb){
-      return_val = false;
-      double_x lbx;
-      lbx.d = sintervals[i].lb;
-      if(lbx.d >= 0) {
-	lbx.x = lbx.x + 1;
-      }
-      else{
-	lbx.x = lbx.x - 1 ;
-      }
-      sintervals[i].lb = lbx.d;
-    }
-    else if(y > sintervals[i].orig_ub){
-      return_val = false;
-      double_x ubx;
-      ubx.d = sintervals[i].ub;
-      if(ubx.d >= 0){
-	ubx.x = ubx.x - 1;
-      }
-      else {
-	ubx.x = ubx.x + 1;
-      }
-      sintervals[i].ub = ubx.d;
-    }   
-  }
-  return return_val;
-}
-
-// memory leak on the polynomial
-polynomial* generate_polynomial(sample_data* sintervals, size_t ssize,
-			  int* power, int power_size, int max_tries){
-
-  for(int i = power_size - 1; i < power_size; i++){
-    printf("Trying to generate a polynomial  with %d terms \n", i+1);
-
-    int count = 0;
-    while(count < max_tries){
-      polynomial* p = solve_with_soplex(sintervals, ssize, power, i+1);
-      if(p && validate_and_fix_intervals(sintervals, ssize, p)){
-	prev_successful_degree = i;
-	return p;
-      }
-      if(p != nullptr){
-	free(p);
-      }
-      count++;
-    }    
-  }
-  return nullptr;
 }
 
 int sample_compare(const void* s1, const void* s2){
@@ -338,20 +80,6 @@ void weighted_random_sample(sample_info* sampled_indices, size_t ssize,
       sampled_indices[j-1].index = i;
     }
   }
-}
-
-
-size_t compute_violated_indices(size_t* violated_indices, interval_data* intervals, size_t nentries, polynomial* poly){
-
-  size_t num_violated_indices = 0;
-  for(size_t i = 0; i < nentries; i++){
-    double y = poly_evaluation(intervals[i].x, poly);
-    if( y < intervals[i].lb || y > intervals[i].ub){
-      violated_indices[num_violated_indices] = i;
-      num_violated_indices++;
-    }
-  }
-  return num_violated_indices;
 }
 
 void evaluate_and_update_weights(size_t* violated_indices, size_t num_violated_indices,
@@ -449,8 +177,8 @@ int create_polynomial(FILE* interval_file_fp){
   //int powers[] = {1, 3, 5}; //sin small case + sin for cos, cosh, cospi, sin, sinh, sinpi
   //int powers[] = {0, 1, 2, 3, 4}; //exp
   //int powers[] = {0, 1, 2, 3, 4, 5}; //exp2, exp10
-  //int powers[] = {1, 2, 3, 4} //log, log10 
-  int powers[] = {1, 2, 3, 4, 5}; //log2 
+  int powers[] = {1, 2, 3, 4}; //log, log10 
+  //int powers[] = {1, 2, 3, 4, 5}; //log2 
 
   int powers_size = sizeof(powers)/sizeof(powers[0]);
 
@@ -494,10 +222,11 @@ int create_polynomial(FILE* interval_file_fp){
     }
 
     /* need to implement these functions */
-    p = generate_polynomial(sampled_intervals, samplesize, powers, powers_size, MAX_TRIES);
+    PolyFinder poly_find;
+    p = poly_find.generate_polynomial(sampled_intervals, samplesize, powers, powers_size, MAX_TRIES, multi);
 
     if(p){
-      n_violated_indices = compute_violated_indices(violated_indices, intervals, nentries, p);
+      n_violated_indices = poly_find.compute_violated_indices(violated_indices, intervals, nentries, p, multi);
       printf("number of violated intervals: %lu, total iterations=%lu \n", n_violated_indices, total_iterations);
 
       if(n_violated_indices <= VIOLATE_THRESHOLD){
@@ -526,7 +255,6 @@ int create_polynomial(FILE* interval_file_fp){
 	break;
       }
       printf("failed to generate polynomial, resetting weights, total_iterations=%lu\n", total_iterations);
-      //prev_successful_degree = 0;      
       regenerate_random_values_and_reset_weights(intervals, nentries);
     }
 
@@ -538,7 +266,6 @@ int create_polynomial(FILE* interval_file_fp){
 	n_violated_indices = 0;
 	
 	printf("not making progress, same number of violated indices, resetting weights, total_iterations=%lu\n", total_iterations);
-	prev_successful_degree = 0;
 	regenerate_random_values_and_reset_weights(intervals, nentries);
 	if(p!= nullptr) {
 	  free(p);
