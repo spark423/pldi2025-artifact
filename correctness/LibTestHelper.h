@@ -79,7 +79,7 @@ unsigned long RunTestForExponent(int numExpBit, FILE* f, char* FuncName) {
   if (totalWrongResult == 0) {
     printf("FP reps with %d exp bits: \033[0;32mcheck\033[0m    \n", numExpBit);
   } else {
-    printf("FP reps with %d exp bits:  \033[0;31mincorrect\033[0m\n", numExpBit);
+    printf("FP reps with %d exp bits: \033[0;31mincorrect\033[0m\n", numExpBit);
   }
   return totalWrongResult;
 }
