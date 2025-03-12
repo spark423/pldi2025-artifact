@@ -3,10 +3,10 @@ objects = LogSmall-RLIBM LogSmall-RI-Outputs LogSmall-RI-Input-Bounds
 CC=g++
 
 SOPLEX_INCLUDE=$(SOPLEX_PATH)/src/
-SOPLEX_LIB=$(SOPLEX_PATH)/libsoplex.a
+SOPLEX_LIB=$(SOPLEX_PATH)/build/lib/libsoplex.a
 INCLUDE=-I$(SOPLEX_INCLUDE)
-CPP_FLAGS=-O3 -frounding-math -I../../helper/ -I../../helper/polynomial-gen/
-LD_FLAGS=$(SOPLEX_LIB) -lmpfr -lgmp  -lz -lm
+CPP_FLAGS=-O3 -frounding-math -I../helper/ -I../helper/polynomial-gen/
+LD_FLAGS=$(SOPLEX_LIB) -lmpfr -lgmp -lz -lm
 
 all: $(objects)
 
