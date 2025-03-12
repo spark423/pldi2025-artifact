@@ -15,7 +15,7 @@ libmobj = $(patsubst %, $(libmobjdir)/%.o, $(libmfiles))
 
 $(libmobjdir)/%.o: $(libmsrcdir)/%.c
 	@mkdir -p $(libmobjdir)
-	$(CC) -O3 -march=native -frounding-math -fsignaling-nans -I../include -W -Wall -c $^  -o $@
+	$(CC) -O3 -std=c17 -march=native -frounding-math -fsignaling-nans -I../include -W -Wall -c $^  -o $@
 
 libm.a: $(libmobj)
 	ar rc $@ $^
