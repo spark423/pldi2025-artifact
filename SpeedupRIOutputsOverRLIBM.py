@@ -38,7 +38,7 @@ width = 0.45  # the width of the bars
 fig, ax = plt.subplots()
 fig.gca().spines['top'].set_visible(False)
 ax.set_ylim(0, 100)
-rects = ax.bar(x, speedup2, width, color="tab:green", label="Rounding-invariant Outputs", zorder = 100)
+rects = ax.bar(x, speedup, width, color="tab:green", label="Rounding-invariant Outputs", zorder = 100)
 
 for bar in rects1:
    height = bar.get_height()
