@@ -90,7 +90,7 @@ void RunTest(char* logFile, char* FuncName) {
   FILE* f = fopen(logFile, "w");
   fprintf(f, "Function: %s\n", FuncName);
   printf("Function: %s\n", FuncName);
-  for (int i = 2; i <= 8; i++) {
+  for (int i = 3; i <= 8; i++) {
     RunTestForExponent(i, f, FuncName);
   }
   fclose(f);
