@@ -27,7 +27,6 @@ float MpfrResult(float x, int numExpBit, unsigned bitlen, mpfr_rnd_t rnd) {
   exact = __MPFR_ELEM__(mval, mval, rnd);
   exact = mpfr_subnormalize(mval, exact, rnd);
   float result = mpfr_get_flt(mval, rnd);
-
   return result;
 }
 
