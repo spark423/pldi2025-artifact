@@ -1,0 +1,12 @@
+./RunCosOurLIBM.sh
+./RunCoshOurLIBM.sh
+./RunCospiOurLIBM.sh
+./RunExpOurLIBM.sh
+./RunExp2OurLIBM.sh
+./RunExp10OurLIBM.sh
+./RunLogOurLIBM.sh
+./RunLog2OurLIBM.sh
+./RunLog10OurLIBM.sh
+./RunSinOurLIBM.sh
+./RunSinhOurLIBM.sh
+./RunSinpiOurLIBM.sh

@@ -20,7 +20,6 @@ int fenv_rnd_modes[4] = {FE_TONEAREST, FE_DOWNWARD, FE_UPWARD, FE_TOWARDZERO};
 enum RoundMode my_rnd_modes[4] = {RNE, RNN, RNP, RNZ};
 char* rnd_modes_string[4] = {"RNE", "RNN", "RNP", "RNZ"};
 
-
 float MpfrResult(float x, int numExpBit, unsigned bitlen, mpfr_rnd_t rnd) { 
   mpfr_set_emin(new_emin);
   mpfr_set_emax(new_emax);
