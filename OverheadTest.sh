@@ -4,5 +4,4 @@ cd overhead/
 ./BuildTest.sh
 ./RunTest.sh
 cd ../
-python3 SpeedupRIInputBoundsOverRLIBM.py
-python3 SpeedupRIOutputsOverRLIBM.py 
+python3 Speedup.py
