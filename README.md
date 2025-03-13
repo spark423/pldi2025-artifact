@@ -1,4 +1,4 @@
-orrectly Rounded Math Libraries Without Worrying about the Application’s Rounding Mode #
+Correctly Rounded Math Libraries Without Worrying about the Application’s Rounding Mode #
 ---
 
 Abstract:
