@@ -17,19 +17,19 @@ speedup2 = []
 file_name = ["sinf.txt", "sinhf.txt", "sinpif.txt", "cosf.txt", "coshf.txt", "cospif.txt", "logf.txt", "log2f.txt", "log10f.txt", "expf.txt", "exp2f.txt", "exp10f.txt"]
 
 for i in range(0, len(labels)-1) :
-    fp = open(file_name[i], "r")
+    fp = open("overhead/" + file_name[i], "r")
     lines = fp.read().splitlines()
     rlibm.append(float(lines[2]))
     fp.close()
 rlibm.append(sum(rlibm))
 for i in range(0, len(labels)-1) :
-    fp = open(file_name[i], "r")
+    fp = open("overhead/" + file_name[i], "r")
     lines = fp.read().splitlines()
     ri_outputs.append(float(lines[1]))
     fp.close()
 ri_outputs.append(sum(ri_outputs))
 for i in range(0, len(labels)-1) :
-    fp = open(file_name[i], "r")
+    fp = open("overhead/" + file_name[i], "r")
     lines = fp.read().splitlines()
     ri_input_bounds.append(float(lines[0]))
     fp.close()
