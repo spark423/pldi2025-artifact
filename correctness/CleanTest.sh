@@ -11,4 +11,5 @@ cd ..
 cd glibc
 make -s clean
 cd ..
+rm -rf results/*
 rm -rf results
