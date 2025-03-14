@@ -10,8 +10,6 @@
 #include "libm.h"
 #include "rounding.h"
 
-#define MAX_STRIDE 19u
-
 mpfr_t mval;
 int new_emin, new_emax;
 
@@ -31,34 +29,23 @@ float MpfrResult(float x, int numExpBit, unsigned bitlen, mpfr_rnd_t rnd) {
 
 unsigned long RunTestForExponent(int numExpBit, FILE* f, char* FuncName) {
   unsigned long wrongResult = 0;
-  int bias = (1 << (numExpBit - 1)) - 1;
-  int emax = (1 << numExpBit) - 1 - bias; 
-  unsigned bitlen = 32; 
-  new_emin = 1 - bias - ((int)bitlen - 1 - numExpBit) + 1;
-  new_emax = emax; 
-  mpfr_set_emin(new_emin);
-  mpfr_set_emax(new_emax);
-  mpfr_init2(mval, bitlen - numExpBit);
- 
-  unsigned long upperlimit = 1lu << (unsigned long)bitlen;
-  for (unsigned long count = 0x0; count < upperlimit; count++) {
-    float x = ConvertBinToFP((unsigned)count, numExpBit, bitlen); 
+  float_x x;
+  for (unsigned long count = 0x0; count < 0x100000000; count++) {
+    x.x = count;
     for (int rnd_index = 0; rnd_index < 4; rnd_index++) {
-      float_x oracleResult = {.f = MpfrResult(x, numExpBit, bitlen, mpfr_rnd_modes[rnd_index])};
+      float_x oracleResult = {.f = MpfrResult(x.f, numExpBit, 32, mpfr_rnd_modes[rnd_index])};
       fesetround(fenv_rnd_modes[rnd_index]);
-      double res = __ELEM__(x);
+      double res = __ELEM__(x.f);
       float_x roundedResult = {.f = (float)res};
       if (oracleResult.f != oracleResult.f && roundedResult.f != roundedResult.f) continue;
       if (oracleResult.x != roundedResult.x) wrongResult++;
-      if (count % 0x100000 == 0) {    
-	if (wrongResult == 0) fprintf(f, "Binary32: check    \n");
-	else fprintf(f, "Binary32: incorrect\n");
-	fflush(f);
-      }
     }
-  }
-  
-  mpfr_clear(mval);
+    if (count % 0x100000 == 0) {    
+      if (wrongResult == 0) fprintf(f, "Binary32: check     (count = %lx)\n", count);
+      else fprintf(f, "Binary32: incorrect (count = %lx)\n", count);
+      fflush(f);
+    }
+  }  
   if (wrongResult == 0) {
     printf("Binary32: \033[0;32mcheck\033[0m    \n");
   } else {
@@ -71,6 +58,10 @@ void RunTest(char* logFile, char* FuncName) {
   FILE* f = fopen(logFile, "w");
   fprintf(f, "Function: %s\n", FuncName);
   printf("Function: %s\n", FuncName);
+  mpfr_set_emin(-148);
+  mpfr_set_emax(128);
+  mpfr_init2(mval, 24);
   RunTestForExponent(8, f, FuncName);
+  mpfr_clear(mval);
   fclose(f);
 }
