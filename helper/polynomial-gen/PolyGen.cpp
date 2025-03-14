@@ -387,7 +387,7 @@ bool PolyFinder::poly_evaluation_multi(double x, polynomial* poly, double& poly_
       double p4_max_x2_max_u = rndu_multiply(p4_max, x2_max);
       double m5_max = max(p4_min_x2_min_u, max(p4_min_x2_max_u, max(p4_max_x2_min_u, p4_max_x2_max_u)));
       double p5_min = m5_min+p1_min;
-      double p5_max = m5_max+p1_max;
+      double p5_max = rndu_add(m5_max, p1_max);
       poly_lb = p5_min;
       poly_ub = p5_max;
     } else {

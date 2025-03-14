@@ -1,4 +1,7 @@
 #!/bin/bash
+cd ../libm
+make -s clean
+cd ../correctness
 cd ourlibm
 make -s clean
 cd ..
