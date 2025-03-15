@@ -1,6 +1,6 @@
 #!/bin/bash
 
 cd correctness-all
-./CleanTest.sh
-./BuildTest.sh
+./CleanTestOurLibm.sh
+./BuildTestOurLibm.sh
 ./RunParallelTestOurLibm.sh
