@@ -15,6 +15,7 @@ int new_emin, new_emax;
 
 mpfr_rnd_t mpfr_rnd_modes[4] = {MPFR_RNDN, MPFR_RNDD, MPFR_RNDU, MPFR_RNDZ};
 int fenv_rnd_modes[4] = {FE_TONEAREST, FE_DOWNWARD, FE_UPWARD, FE_TOWARDZERO};
+char* rnd_modes_string[4] = {"RNE", "RNN", "RNP", "RNZ"};
 
 float MpfrResult(float x, mpfr_rnd_t rnd) { 
   int exact = mpfr_set_d(mval, x, MPFR_RNDZ);
@@ -23,33 +24,31 @@ float MpfrResult(float x, mpfr_rnd_t rnd) {
   return result;
 }
 
-unsigned long RunTestForExponent(FILE* f, char* FuncName) {
-  unsigned long wrongResult = 0;
+int RunTestForExponent(FILE* f, char* FuncName) {
   float_x x;
-  for (unsigned long count = 0x0; count < 0x100000000; count++) {
-    x.x = count;
-    int all_correct = 1;
-    for (int rnd_index = 0; rnd_index < 4; rnd_index++) {
+  int all_correct = 1;
+  for (int rnd_index = 0; rnd_index < 4; rnd_index++) {
+    unsigned long wrongResult = 0;
+    for (unsigned long count = 0x0; count < 0x100000000; count++) {
+      x.x = count;
       float_x oracleResult = {.f = MpfrResult(x.f, mpfr_rnd_modes[rnd_index])};
-      fesetround(FE_TONEAREST);
       double res = __ELEM__(x.f);
-      fesetround(fenv_rnd_modes[rnd_index]);
       float_x roundedResult = {.f = (float)res};
       if (oracleResult.f != oracleResult.f && roundedResult.f != roundedResult.f) continue;
-      if (oracleResult.x != roundedResult.x) all_correct = 0;
+      if (oracleResult.x != roundedResult.x) wrongResult++;
+      if (count % 0x100000 == 0) {    
+	fprintf(f, "Binary32 (%s): no. of inputs tested = 0x%lx, no. of inputs with wrong results = %ld\n", rnd_modes_string[rnd_index], count, wrongResult);
+	fflush(f);
+      }
     }
-    if (!all_correct) wrongResult++;
-    if (count % 0x100000 == 0) {    
-      fprintf(f, "Binary32: no. of inputs tested = 0x%lx, no. of inputs with wrong results = %ld\n", count, wrongResult);
-      fflush(f);
-    }
+    if (wrongResult) all_correct = 0;
   }  
-  if (wrongResult == 0) {
+  if (all_correct) {
     printf("Binary32: \033[0;32mcheck\033[0m    \n");
   } else {
     printf("Binary32: \033[0;31mincorrect\033[0m\n");
   }
-  return wrongResult;
+  return all_correct;
 }
 
 void RunTest(char* logFile, char* FuncName) {
