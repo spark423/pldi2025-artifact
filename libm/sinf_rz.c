@@ -14,7 +14,8 @@ double ourlibm_sinf_rz(float x) {
 	if (b < 0x73d12ed2) return rz_multiply(x, 0x1.ffffffffffffep-1);
 	z = x;
 	z2 = rz_multiply(z, z);
-	double temp = rz_add(rz_multiply(z2, 0x1.11130658ac4e4p-7), -0x1.55555558c07f5p-3);
+	//y=0x1.0000000000011p+0 x^(1) + -0x1.55555558b5e8cp-3 x^(3) + 0x1.111300f42eec9p-7 x^(5)
+	double temp = rz_add(rz_multiply(z2, 0x1.111300f42eec9p-7), -0x1.55555558b5e8cp-3);
 	return rz_multiply(z, rz_add(rz_multiply(temp, z2), 0x1.0000000000011p+0));
       }
       uint64_t p0 = m*0x441529fc27;

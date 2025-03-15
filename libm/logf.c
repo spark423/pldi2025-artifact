@@ -26,7 +26,7 @@ double ourlibm_logf(float x) {
   int FIndex = fit.x >> 16;
   fit.x |= 0x3f800000;
   double f = fix.f - fit.f;
-  f = rz_multiply(f, oneByF[FIndex]);
+  f = rz_multiply(f, oneByF[FIndex]); 
   double f2 = f*f;
   double y = 0.0;
   if (f < 0x1.789107b0e4883p-9) {

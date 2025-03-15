@@ -1,7 +1,7 @@
 #include "mathhelper.h"
 
-//y=0x1.71547652bd04ep+0 x^(1) + -0x1.71547697769fcp-1 x^(2) + 0x1.ec719b9ca88efp-2 x^(3) + -0x1.7204d1b62d1e3p-2 x^(4) + 0x1.4f5cdeeca214ep-2 x^(5)
-static double coeffs[] = {0x1.71547652bd04ep+0, -0x1.71547697769fcp-1, 0x1.ec719b9ca88efp-2, -0x1.7204d1b62d1e3p-2, 0x1.4f5cdeeca214ep-2};
+//y=0x1.71547652bd4d5p+0 x^(1) + -0x1.7154769b8476p-1 x^(2) + 0x1.ec71a95f52e08p-2 x^(3) + -0x1.720d688d97658p-2 x^(4) + 0x1.512a0c64b6a9ep-2 x^(5)
+static double coeffs[] = {0x1.71547652bd4d5p+0, -0x1.7154769b8476p-1, 0x1.ec71a95f52e08p-2, -0x1.720d688d97658p-2, 0x1.512a0c64b6a9ep-2};
 
 double ourlibm_log2f_rz(float x) {
   float_x fix = {.f=x};

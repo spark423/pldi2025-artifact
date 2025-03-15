@@ -36,12 +36,11 @@ double ourlibm_exp2f(float x) {
     return ret.d;
   }
   double y = 0.0;
-  if (__builtin_expect(R == -0x1.48ef5ep-18, 0)) y = 0x1.ffff8e8p-1;
+  if (__builtin_expect(R == -0x1.a7a04cp-14, 0)) y = 0x1.fff6d28p-1;
+  else if (__builtin_expect(R == -0x1.5a3f34p-21, 0)) y = 0x1.fffff08p-1;
   else if (__builtin_expect(R == 0x1.853a6ep-9, 0)) y = 0x1.0087098p+0;
   else {
-    //-0x1.48ef5ep-18, 0x1.853a6ep-9
-    //y=0x1.fffffffffffffp-1 x^(0) + 0x1.62e42fefa3635p-1 x^(1) + 0x1.ebfbdff8704acp-3 x^(2) + 0x1.c6b08d060c97ep-5 x^(3) + 0x1.3b2b10377ada5p-7 x^(4) + 0x1.5fc566cfdce21p-10 x^(5)          
-    double coeffs[6] = {0x1.fffffffffffffp-1, 0x1.62e42fefa3635p-1, 0x1.ebfbdff8704acp-3, 0x1.c6b08d060c97ep-5, 0x1.3b2b10377ada5p-7, 0x1.5fc566cfdce21p-10};
+    double coeffs[6] = {0x1p+0, 0x1.62e42fefa37eep-1, 0x1.ebfbdff825106p-3, 0x1.c6b08bf28a8bap-5, 0x1.3b2b523757898p-7, 0x1.61c93ca3f7bc8p-10};
     double R2 = R*R;
     double tmp1 = R*coeffs[1]+coeffs[0];
     double tmp2 = R*coeffs[3]+coeffs[2];

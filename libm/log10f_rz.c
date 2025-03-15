@@ -44,14 +44,14 @@ double ourlibm_log10f_rz(float x) {
   double f2 = rz_multiply(f, f);
   double y = 0.0;
   if(f < 0x1.5ac30c30c30c2p-9) {
-    if (__builtin_expect(f == 0x1.a17982f305e6p-11, 0)) y = 0x1.6a784ede377e9p-12;
+    if (__builtin_expect(f == 0x1.cd28ac42fd9b7p-12, 0)) y = 0x1.90785e9e80b5fp-13;
+    else if (__builtin_expect(f == 0x1.a17982f305e6p-11, 0)) y = 0x1.6a784ede375e9p-12;
     else if (__builtin_expect(f == 0x1.8027f6027f602p-10, 0)) y = 0x1.4d6de75f6cdd5p-11;
     else if (__builtin_expect(f == 0x1.b2ce38e38e38dp-10, 0)) y = 0x1.795ac8e55e169p-11;
     else if (__builtin_expect(f == 0x1.1fddb0d3224f2p-9, 0)) y = 0x1.f386a179401e2p-11;
     else if(f < 0x1.5abffffffffffp-10) {
-      //0x1.a17982f305e6p-11
-      //y=0x1.bcb7b1527ceccp-2 x^(1) + -0x1.bcb7b1b949169p-3 x^(2) + 0x1.28776aaea8942p-3 x^(3) + -0x1.a7acff226b581p-4 x^(4)
-      double coeffs[4] = {0x1.bcb7b1527ceccp-2, -0x1.bcb7b1b949169p-3, 0x1.28776aaea8942p-3, -0x1.a7acff226b581p-4};
+      //y=0x1.bcb7b1524e23dp-2 x^(1) + -0x1.bcb7acf116049p-3 x^(2) + 0x1.2863e7c5ba816p-3 x^(3) + -0x1.750f42347670ap-4 x^(4)
+      double coeffs[4] = {0x1.bcb7b1524e23dp-2, -0x1.bcb7acf116049p-3, 0x1.2863e7c5ba816p-3, -0x1.750f42347670ap-4};
       double tmp1 = rz_multiply(coeffs[1], f);
       double tmp2 = rz_multiply(coeffs[3], f);
       double tmp3 = rz_add(tmp1, coeffs[0]);
