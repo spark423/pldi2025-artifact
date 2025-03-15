@@ -10,7 +10,7 @@
 #include "libm.h"
 #include "rounding.h"
 
-#define MAX_STRIDE 22u
+#define MAX_STRIDE 19u
 
 mpfr_t mval;
 int new_emin, new_emax;
