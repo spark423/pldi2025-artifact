@@ -73,7 +73,7 @@ $ ./CorrectnessTestOurLibm.sh
 ```
 This script will take roughly 20 minutes. This script tests whether both the rounding-invariant input bounds and rounding-invariant outputs implementations in OurLibm produce the correctly rounded results for uniformly sampled FP inputs with different number of exponent and mantissa bits under all standard rounding modes. If the test is successful, you should see "check" in green text, for each elementary function and representation for each method. Otherwise, it will print "incorrect" in red text, which signifies that the test has failed.
 
-We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. However, we really don't recommend running this for artifact evaluation purposes, as this will take > 48 hours, even when run in parallel...
+We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. However, we really don't recommend running this for artifact evaluation purposes, as this will take > 24 hours, even when run in parallel...
 ```
 $ ./CorrectnessTestFullOurLibm.sh
 ```

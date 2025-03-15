@@ -50,7 +50,7 @@ width = 0.45  # the width of the bars
 
 fig, ax = plt.subplots()
 fig.gca().spines['top'].set_visible(False)
-ax.set_ylim(0, 150)
+ax.set_ylim(-30, 150)
 rects1 = ax.bar(x-width/2, speedup1, width, color="tab:orange", label="Rounding-invariant Bounds", zorder = 100)
 rects2 = ax.bar(x+width/2, speedup2, width, color="tab:green", label="Rounding-invariant Outputs", zorder = 100)
 
