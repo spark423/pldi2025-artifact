@@ -15,7 +15,7 @@ Table of Content:
 4\. EVALUATION GUIDE FOR THE ARTIFACT \
 (1) Check the correctness of OurLibm \
 (2) Check the correctness of mainstream math libraries \
-(3) Check the correctness of RLIBM with and without round-to-nearest-ties-to-even \
+(3) Check the correctness of RLIBM with and without RNE (round-to-nearest-ties-to-even) \
 (4) Check the performance of OurLibm against RLIBM
 
 ---
@@ -85,13 +85,24 @@ $ ./CorrectnessTestOther.sh
 ```
 This script will take roughly 20 minutes. The testing method is the same as that for OurLibm. This test corresponds to the columns for CORE-MATH and glibc in Table 1.
 
-We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. As is the case with the test for OurLibm, the test is expected to take a prohibitively long time.
+We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. The test is expected to take over 24 hours.
 
 ```
 $ ./CorrectnessTestFullOther.sh
 ```
-(3) Check the correctness of RLIBM with and without round-to-nearest-ties-to-even (Claim 3):
+(3) Check the correctness of RLIBM with and without RNE (round-to-nearest-ties-to-even) (Claim 3):
 
+To test the correctness of RLIBM under various rounding modes, both without and without explicit rounding mode setting to RNE, run the bash script,
+```
+$ ./CorrectnessTestRLIBM.sh
+```
+This script will take roughly 20 minutes. The testing method is the same as that for OurLibm. Because the testing is sampling based, not all RLIBM functions without RNE will fail this test. To confirm the correctness of RLIBM's functions with respect to all inputs, representations (bit-lengths <= 32), and rounding modes, run the following script.
+
+```
+$ ./CorrectnessTestFullRLIBM.sh
+```
+
+As is the case with the other full-scale tests, the test is expected to take a prohibitively long time for artifact evaluation purposes.
 
 (4) Check the performance of OurLibm against RLIBM (Claim 4):
 
