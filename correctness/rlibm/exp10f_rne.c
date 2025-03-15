@@ -7,6 +7,6 @@ int main(int argc, char** argv) {
         printf("Usage: %s <log file>\n", argv[0]);
         exit(0);
     }
-    RunTest(argv[1], "Original RLIBM exp10f under RNE");
+    RunTest(argv[1], "Original RLIBM exp10f with RNE");
     return 0;
 }
