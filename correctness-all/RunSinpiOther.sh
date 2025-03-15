@@ -1,4 +1,4 @@
 #!/bin/bash
-touch results/core_math_sinpif.txt
+touch results/mlib/core_math_sinpif.txt
 echo -e "|  sinpi(x)  |"
-./core-math/sinpif results/core_math_sinpif.txt
+./core-math/sinpif results/mlib/core_math_sinpif.txt

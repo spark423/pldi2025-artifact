@@ -1,6 +1,6 @@
 #!/bin/bash
-touch results/core_math_log10f.txt
-touch results/glibc_double_log10.txt
+touch results/mlib/core_math_log10f.txt
+touch results/mlib/glibc_double_log10.txt
 echo -e "|  log10(x)  |"
-./core-math/log10f results/core_math_log10f.txt
-./glibc/log10 results/glibc_double_log10.txt
+./core-math/log10f results/mlib/core_math_log10f.txt
+./glibc/log10 results/mlib/glibc_double_log10.txt

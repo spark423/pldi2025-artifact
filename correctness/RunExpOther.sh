@@ -1,6 +1,6 @@
 #!/bin/bash
-touch results/core_math_expf.txt
-touch results/glibc_double_exp.txt
+touch results/mlib/core_math_expf.txt
+touch results/mlib/glibc_double_exp.txt
 echo -e "|  exp(x)  |"
-./core-math/expf results/core_math_expf.txt
-./glibc/exp results/glibc_double_exp.txt
+./core-math/expf results/mlib/core_math_expf.txt
+./glibc/exp results/mlib/glibc_double_exp.txt
