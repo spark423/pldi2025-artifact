@@ -1,6 +1,6 @@
 #!/bin/bash
 
 cd correctness
-./CleanTest.sh
-./BuildTest.sh
+./CleanTestRLIBM.sh
+./BuildTestRLIBM.sh
 ./RunParallelTestRLIBM.sh
