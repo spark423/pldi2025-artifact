@@ -1,61 +1,40 @@
 #include "libm.h"
 
 double rlibm_log2f(float x) {
-
-  float_x inp = {.f = x};
-  uint32_t ux = inp.x;
-  uint64_t m = ux & 0x7FFFFF;
-  m = m << 29;
-  int exp = (ux >> 23) - 127;
-  
-  if(__builtin_expect(ux < 0x800000 || ux >= 0x7F800000, 0)){
-
-    /* This code for handling subnormals and special cases is from the
-       CORE-MATH project:
-       https://gitlab.inria.fr/core-math/core-math/-/blob/master/src/binary32/log2/log2f.c
-    */    
-    if (ux==0||ux==(1u<<31))
-      return -__builtin_inff(); // +0.0 || -0.0
-
-    uint32_t inf_or_nan = ((ux>>23)&0xff) == 0xff, nan = inf_or_nan && (ux<<9);
-
-    if (ux>>31 && !nan) return __builtin_nanf("-");
-
-    if (inf_or_nan) return x;
-
-    // subnormal
-    int nz = __builtin_clzll(m);
-    m <<= nz-11;
-    m &= ~0ul>>12;
-    exp = exp - (nz - 12);
+  float_x fix = {.f=x};
+  int m = 0;
+  if(fix.x < 0x800000 || fix.x >= 0x7F800000) {
+    if((fix.x & 0x7FFFFFFF) == 0) {
+      fix.x = 0xFF800000;
+      return fix.f;
+    }
+    if(fix.x > 0x7FFFFFFF) {
+      return (x-x)/0.0;
+    }
+    if(fix.x >= 0x7F800000) {
+      return x;
+    }
+    fix.f *= 8388608.0;
+    m-=23;
   }
-
-  /* power of 2 */
-  if(__builtin_expect(!m, 0)) return exp;
-  
-  double_x  xd = {.x = m | 0x3FF0000000000000ULL};
-  uint64_t FIndex = m>> 45;
-  uint64_t fm = (FIndex) << 45;
-  double_x  xf = {.x = fm |0x3FF0000000000000ULL};
-  double f = xd.d - xf.d;  
-  
-  f *= oneByF[FIndex];
-
-  double coeffs[] = {
-    0x1.71547652bcde3p+0,
-    -0x1.7154769679dd8p-1,
-    0x1.ec7198ec61291p-2,
-    -0x1.72033bee9c2d6p-2,
-    0x1.4f082e01903edp-2
-  };
-  
-  double xsquare = f*f;
-
-  double temp1 = coeffs[3] + f * coeffs[4];
-  double temp2 = coeffs[1] + f * coeffs[2];
-  double temp3 = temp2 + xsquare * temp1;
-  double temp4 = xsquare * temp3;
-  double temp5 = logBase2[FIndex] + exp;
-  double y = temp4 + f * coeffs[0] + temp5;
-  return y;
+  m+= fix.x >> 23;
+  m -= 127;
+  fix.x &= 0x007fffff;
+  fix.x |= 0x3f800000;
+  float_x fit = {.x = fix.x & 0x007f0000};
+  int FIndex = fit.x >> 16;
+  fit.x |= 0x3f800000;
+  double f = fix.f - fit.f;
+  f = f*oneByF[FIndex];
+  //y=0x1.71547652bd4e6p+0 x^(1) + -0x1.7154769b8f767p-1 x^(2) + 0x1.ec71a980667dp-2 x^(3) + -0x1.720d7c1b8807cp-2 x^(4) + 0x1.512e028fac533p-2 x^(5)
+  static double coeffs[] = {0x1.71547652bd4e6p+0, -0x1.7154769b8f767p-1, 0x1.ec71a980667dp-2, -0x1.720d7c1b8807cp-2, 0x1.512e028fac533p-2};
+  double f2 = f*f;
+  double tmp1 = f*coeffs[2]+coeffs[1];
+  double tmp2 = f*coeffs[4]+coeffs[3];
+  double tmp3 = f2*tmp2+tmp1;
+  double tmp4 = f2*tmp3;
+  double tmp5 = f*coeffs[0];
+  double y = tmp4+tmp5;
+  double extra = logBase2[FIndex]+m;
+  return y+extra;
 }
