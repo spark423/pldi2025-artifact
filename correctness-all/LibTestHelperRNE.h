@@ -14,6 +14,7 @@ mpfr_t mval;
 int new_emin, new_emax;
 
 mpfr_rnd_t mpfr_rnd_modes[4] = {MPFR_RNDN, MPFR_RNDD, MPFR_RNDU, MPFR_RNDZ};
+int fenv_rnd_modes[4] = {FE_TONEAREST, FE_DOWNWARD, FE_UPWARD, FE_TOWARDZERO};
 enum RoundMode my_rnd_modes[4] = {RNE, RNN, RNP, RNZ};
 char* rnd_modes_string[4] = {"RNE", "RNN", "RNP", "RNZ"};
 
@@ -43,14 +44,14 @@ unsigned long RunTestForExponent(int numExpBit, FILE* f, char* FuncName) {
     mpfr_init2(mval, bitlen - numExpBit);
     
     unsigned long upperlimit = 1lu << (unsigned long)bitlen;
-    for (unsigned long count = 0; count < upperlimit; count += 1) {
-      float x = ConvertBinToFP((unsigned)count, numExpBit, bitlen); 
-      for (int rnd_index = 0; rnd_index < 4; rnd_index++) {
-        float_x oracleResult = {.f = MpfrResult(x, numExpBit, bitlen, mpfr_rnd_modes[rnd_index])};
+    for (int rnd_index = 0; rnd_index < 4; rnd_index++) {
+      for (unsigned long count = 0; count < upperlimit; count += 1) {
+	float x = ConvertBinToFP((unsigned)count, numExpBit, bitlen); 
+	float_x oracleResult = {.f = MpfrResult(x, numExpBit, bitlen, mpfr_rnd_modes[rnd_index])};
 	double res = __ELEM__(x);
-        float_x roundedResult = {.f = RoundDoubleToFEN(res, numExpBit, bitlen, my_rnd_modes[rnd_index], 0)};
-        if (oracleResult.f != oracleResult.f && roundedResult.f != roundedResult.f) continue;
-        if (oracleResult.x != roundedResult.x && wrongResult < 10) wrongResult++;
+	float_x roundedResult = {.f = RoundDoubleToFEN(res, numExpBit, bitlen, my_rnd_modes[rnd_index], 0)};
+	if (oracleResult.f != oracleResult.f && roundedResult.f != roundedResult.f) continue;
+	if (oracleResult.x != roundedResult.x && wrongResult < 10) wrongResult++;
       }
     }
     
