@@ -15,9 +15,9 @@ const int multi = 0;
 #endif
 
 #ifdef EXIT_ON_THRESHOLD
-const int EXIT_ON_THRESHOLD = 1;
+const int exit_on_threshold = 1;
 #else
-const int EXIT_ON_THRESHOLD = 0;
+const int exit_on_threshold = 0;
 #endif
 
 void check_sorted(sample_info* sampled_indices, size_t ssize){
@@ -129,24 +129,23 @@ bool check_sampled_indices(sample_info* sample, sample_info* prev_sample, size_t
   return true;
 }
 
-void print_polyinfo(polynomial* p){
+void print_polyinfo(FILE* polynomial_file_fp, polynomial* p){
   if(p->termsize == 0){
     printf("Polynomial has no terms!\n");
     exit(0);
   }
   
-  printf("Polynomial: y=%a x^(%d)",p->coeffs[0],p->power[0]);
+  fprintf(polynomial_file_fp, "Polynomial: y=%a x^(%d)",p->coeffs[0],p->power[0]);
   for(int j=1;j<p->termsize;j++){
-    printf(" + %a x^(%d)",p->coeffs[j],p->power[j]);
+    fprintf(polynomial_file_fp, " + %a x^(%d)",p->coeffs[j],p->power[j]);
   }
-  printf("\n");
+  fprintf(polynomial_file_fp, "\n");
 }
 
-int create_polynomial(FILE* interval_file_fp, vector<int> powers){
-
-  printf("EXIT_ON_THRESHOLD is %d\n", EXIT_ON_THRESHOLD);
-  
+int create_polynomial(FILE* interval_file_fp, FILE* polynomial_file_fp, vector<int> powers, int violate_threshold){
+ 
   assert(interval_file_fp != nullptr);
+  assert(polynomial_file_fp != nullptr);
 
   /* count the number of entries */
 
@@ -222,15 +221,16 @@ int create_polynomial(FILE* interval_file_fp, vector<int> powers){
       n_violated_indices = poly_find.compute_violated_indices(violated_indices, intervals, nentries, p, multi);
       printf("number of violated intervals: %lu, total iterations=%lu \n", n_violated_indices, total_iterations);
 
-      if(n_violated_indices <= VIOLATE_THRESHOLD){
-	printf("VIOLATING INPUTS BELOW THRESHOLD:\n");
-	for(size_t m = 0; m < n_violated_indices; m++){	
-	  if (m) printf(", ");
-	  printf("%a", intervals[violated_indices[m]].x);
-	  if (m==n_violated_indices-1) printf("\n");
+      if(n_violated_indices <= violate_threshold){
+	if (n_violated_indices) fprintf(polynomial_file_fp, "Polynomial with violated inputs:\n");
+	for(size_t m = 0; m < n_violated_indices; m++){		
+	  if (m) fprintf(polynomial_file_fp, "else if (__builtin_expect(xp == %a, 0)) y = %a;\n", intervals[violated_indices[m]].x, (intervals[violated_indices[m]].lb+intervals[violated_indices[m]].ub)/2);
+	  else fprintf(polynomial_file_fp, "if (__builtin_expect(xp == %a, 0)) y = %a;\n", intervals[violated_indices[m]].x, (intervals[violated_indices[m]].lb+intervals[violated_indices[m]].ub)/2);
+	  if (m == n_violated_indices - 1) fprintf(polynomial_file_fp, "else {\n");
 	}
-	print_polyinfo(p);
-	if(EXIT_ON_THRESHOLD){
+	print_polyinfo(polynomial_file_fp, p);
+	if (n_violated_indices) fprintf(polynomial_file_fp, "\n}\n");
+	if(exit_on_threshold){
 	  break;
 	}
       }
@@ -274,7 +274,7 @@ int create_polynomial(FILE* interval_file_fp, vector<int> powers){
   } while(n_violated_indices > 0 || !p);
 
   if(p){
-    print_polyinfo(p);
+    print_polyinfo(polynomial_file_fp, p);
   }
   else {
     printf("Could not generate the polynomial that satisifies all intervals, check for partial results with a few violated intervals\n");

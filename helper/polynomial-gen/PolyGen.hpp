@@ -11,8 +11,7 @@
 #include <stdlib.h>
 
 #define MAX_TRIES 200
-#define VIOLATE_THRESHOLD 25
-#define SAMPLE_MATCH_THRESHOLD 25
+#define SAMPLE_MATCH_THRESHOLD 20
 #define MAX_ITERATIONS 1200
 
 using namespace soplex;
