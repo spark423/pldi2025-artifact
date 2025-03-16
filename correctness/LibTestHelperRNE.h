@@ -79,12 +79,12 @@ unsigned long RunTestOracle(FILE* f, char* FuncName) {
   float_x x;
   unsigned long wrongResult = 0, totalWrongResult = 0; 
   unsigned long upperlimit = 1lu << (unsigned long)32;
-  unsigned step = 1u << 23;
+  unsigned step = 1u << 10;
   for (unsigned long count = 0; count < upperlimit; count += step) {
     x.x = count;
     double_x oracleResult = {.d = ComputeOracleResult(x.f, mval)};
     double res = __ELEM__(x.f);
-    double_x roundedResult = {.d = RoundToFloat34RNO(x.f)};
+    double_x roundedResult = {.d = RoundToFloat34RNO(res)};
     if (oracleResult.d != oracleResult.d && roundedResult.d != roundedResult.d) continue;
     if (oracleResult.x != roundedResult.x && wrongResult < 10) wrongResult++;
   }    
