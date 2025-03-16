@@ -69,7 +69,8 @@ double ourlibm_log10f(float x) {
       y = tmp3*f;
     }
   } else {
-    if (__builtin_expect(f == 0x1.63875b37e875bp-9, 0)) y = 0x1.3463f286e5e07p-10;                                                     else if (__builtin_expect(f == 0x1.7f15789157891p-9, 0)) y = 0x1.4c41e5f756217p-10; 
+    if (__builtin_expect(f == 0x1.63875b37e875bp-9, 0)) y = 0x1.3463f286e5e07p-10;
+    else if (__builtin_expect(f == 0x1.7f15789157891p-9, 0)) y = 0x1.4c41e5f756217p-10; 
     else if (__builtin_expect(f == 0x1.8ff099fc267fp-9, 0)) y = 0x1.5adab9d4238b9p-10;
     else if (__builtin_expect(f == 0x1.bde34a2b10bf5p-9, 0)) y = 0x1.82a2d2e7aa3a1p-10;
     else if (__builtin_expect(f == 0x1.c12cp-9, 0)) y = 0x1.857a8f8p-10;
