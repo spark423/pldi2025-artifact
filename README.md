@@ -83,7 +83,7 @@ To test the correctness of mainstream math libraries (e.g., CORE-MATH and glibc)
 ```
 $ ./CorrectnessTestOther.sh
 ```
-This script will take roughly 20 minutes. The testing method is the same as that for OurLibm. This test corresponds to the columns for CORE-MATH and glibc in Table 1.
+This script will take roughly 20 minutes. The testing method is nearly identical to that for OurLibm with the following difference: for functions for which the inputs with incorrect results are known, the inputs are included in the sample. This test corresponds to the columns for CORE-MATH and glibc in Table 1.
 
 We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. The test is expected to take over 24 hours.
 
@@ -96,7 +96,7 @@ To test the correctness of RLIBM under various rounding modes, both without and 
 ```
 $ ./CorrectnessTestRLIBM.sh
 ```
-This script will take roughly 20 minutes. The testing method is the same as that for OurLibm. Because the testing is sampling based, not all RLIBM functions without RNE will fail this test. To confirm the correctness of RLIBM's functions with respect to all inputs, representations (bit-lengths <= 32), and rounding modes, run the following script.
+This script will take roughly 20 minutes. The testing method is the same as that for CORE-MATH and glibc. To confirm the correctness of RLIBM's functions with respect to all inputs, representations (bit-lengths <= 32), and rounding modes, run the following script.
 
 ```
 $ ./CorrectnessTestFullRLIBM.sh
@@ -112,5 +112,3 @@ To test the speedup of both the rounding-invariant input bounds and outputs meth
 $ ./OverheadTest.sh
 ```
 This script will take roughly 2 hours. For each function, this script executes three different implementations: rounding-invariant input bounds, rounding-invariant outputs, and RLIBM with the fesetround calls. The script executes each implementation on all binary32 FP inputs and collects the aggregate cycles. Once the script terminates, you will see the following file 'speeup_over_rlibm.pdf'. The file contains the contents of Figure 7.
-
-
