@@ -3,91 +3,117 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
 #include "mpfr.h"
 
 #include "libm.h"
-#include "rounding.h"
+#include "RoundToOdd.h"
 
-#define MAX_STRIDE 19u
+// MAXVAL = 0111 1111 0111 1111 1111 1111 1111 1111 11
+#define MAXVAL 3.40282361850336062550457001444955389952e+38
+// MAXm1VAL = 0111 1111 0111 1111 1111 1111 1111 1111 10
+#define MAXm1VAL 3.40282356779733661637539395458142568448e+38
 
 mpfr_t mval;
-int new_emin, new_emax;
-
-mpfr_rnd_t mpfr_rnd_modes[4] = {MPFR_RNDN, MPFR_RNDD, MPFR_RNDU, MPFR_RNDZ};
 int fenv_rnd_modes[4] = {FE_TONEAREST, FE_DOWNWARD, FE_UPWARD, FE_TOWARDZERO};
-enum RoundMode my_rnd_modes[4] = {RNE, RNN, RNP, RNZ};
-char* rnd_modes_string[4] = {"RNE", "RNN", "RNP", "RNZ"};
 
-float MpfrResult(float x, int numExpBit, unsigned bitlen, mpfr_rnd_t rnd) { 
-  mpfr_set_emin(new_emin);
-  mpfr_set_emax(new_emax);
-  int exact = mpfr_set_d(mval, x, MPFR_RNDZ);
-  exact = mpfr_subnormalize(mval, exact, MPFR_RNDZ);
-  exact = __MPFR_ELEM__(mval, mval, rnd);
-  exact = mpfr_subnormalize(mval, exact, rnd);
-  float result = mpfr_get_flt(mval, rnd);
-  return result;
-}
-
-unsigned long RunTestForExponent(int numExpBit, FILE* f, char* FuncName) {
-  unsigned long totalWrongResult = 0;
-
-  for (unsigned bitlen = numExpBit + 2; bitlen <= numExpBit + 24; bitlen++) {
-    unsigned long wrongResult = 0;
-    int bias = (1 << (numExpBit - 1)) - 1;
-    int emax = (1 << numExpBit) - 1 - bias;
+double ComputeOracleResult(float x, mpfr_t mval) {
+  if (x == 1.0 / 0.0) return 1.0 / 0.0;
+  if (x == 0) return -1.0 / 0.0;
     
-    new_emin = 1 - bias - ((int)bitlen - 1 - numExpBit) + 1;
-    new_emax = emax;
-    
-    mpfr_init2(mval, bitlen - numExpBit);
-    
-    // Run at most 64K at a time. That's still 5 * 22 * 7 * 64K = 50M tests
-    unsigned long upperlimit = 1lu << (unsigned long)bitlen;
-    unsigned long start = bitlen <= MAX_STRIDE ?
-                          0 : 1lu << (bitlen - MAX_STRIDE) - 1;
-    unsigned step = (bitlen > MAX_STRIDE) ? (1u << (bitlen - MAX_STRIDE)) : 1u;
-    for (int rnd_index = 0; rnd_index < 4; rnd_index++) {
-      fesetround(fenv_rnd_modes[rnd_index]);
-      for (unsigned long count = start; count < upperlimit; count += step) {
-	float x = ConvertBinToFP((unsigned)count, numExpBit, bitlen); 
-	float_x oracleResult = {.f = MpfrResult(x, numExpBit, bitlen, mpfr_rnd_modes[rnd_index])};
-	double res = __ELEM__(x);
-	float_x roundedResult = {.f = RoundDoubleToFEN(res, numExpBit, bitlen, my_rnd_modes[rnd_index], 0)};
-	if (oracleResult.f != oracleResult.f && roundedResult.f != roundedResult.f) continue;
-	if (oracleResult.x != roundedResult.x && wrongResult < 10) wrongResult++;
-      }
-    }
-    
-    if (wrongResult == 0) fprintf(f, "Testing FP%u(%d exp bit): check    \n", bitlen, numExpBit);
-    else fprintf(f, "Testing FP%u(%d exp bit): incorrect\n", bitlen, numExpBit);
-    fflush(f);
-    totalWrongResult += wrongResult;
-    
-    mpfr_clear(mval);
+  // Set float value to mpfr. This should be exact
+  int status = mpfr_set_d(mval, (double)x, MPFR_RNDN);
+  if (status != 0) {
+      printf("Something went wrong when setting float to mpfr\n");
+      exit(0);
   }
   
-  if (totalWrongResult == 0) {
-    fprintf(f, "FP reps with %d exp bits: check    \n", numExpBit);
+  // Call appropriate function from MPFR.
+  int sticky = __MPFR_ELEM__(mval, mval, MPFR_RNDZ);
+  sticky = mpfr_subnormalize(mval, sticky, MPFR_RNDZ);
+
+  // FromMPFRToFloat34RO accepts a MPFR value and turns it into a 34-bit FP
+  // value with the ro mode. Also accepts sticky bit.
+  return FromMPFRToFloat34Ro(mval, sticky);
+}
+
+double RoundToFloat34RNO(double val) {
+  // Take care of special cases
+  if (val == 0.0) return val;
+  if (val == 1.0 / 0.0) return val;
+  if (val == -1.0 / 0.0) return val;
+  if (val > 0) {
+    if (val < ldexp(1.0, -150)) return ldexp(1.0, -151);
+    if (val > MAXm1VAL) return MAXVAL;
+    
   } else {
-    fprintf(f, "FP reps with %d exp bits: incorrect\n", numExpBit);
+    if (val > ldexp(-1.0, -150)) return ldexp(-1.0, -151);
+    if (val < -MAXm1VAL) return -MAXVAL;
+  }
+  
+  // At this point we have AT LEAST 2 precision bits. Guaranteed 1+ mantissa bit.
+  double_x dx;
+  dx.d = val;
+  
+  // Get exp value of val
+  int exp;
+  double frac = frexp(val, &exp);
+  exp--;
+  
+  // with exp value, figure out how many precision/mantissa bits i get to have
+  // # precision = min(26, max(2, 152 + exp))
+  // # mantissa  = min(25, max(1, 151 + exp))
+  long numMantissa = 151L + exp;
+  if (numMantissa < 1) numMantissa = 1;
+  if (numMantissa > 25) numMantissa = 25;
+  
+  unsigned long sticky = dx.x & ((1LU << (52LU - (unsigned long)numMantissa)) - 1LU);
+  dx.x -= sticky;
+  if (sticky != 0LU) dx.x |= 1LU << (52LU - (unsigned long)numMantissa);
+  
+  return dx.d;
+}
+
+unsigned long RunTestOracle(FILE* f, char* FuncName) {
+  float_x x;
+  unsigned long wrongResult = 0, totalWrongResult = 0; 
+  unsigned long upperlimit = 1lu << (unsigned long)32;
+  unsigned step = 1u << 23;
+  for (unsigned long count = 0; count < upperlimit; count += step) {
+    for (int rnd_index = 0; rnd_index < 4; rnd_index++) {
+      x.x = count;
+      double_x oracleResult = {.d = ComputeOracleResult(x.f, mval)};
+      fesetround(fenv_rnd_modes[rnd_index]);
+      double res = __ELEM__(x.f);
+      double_x roundedResult = {.d = RoundToFloat34RNO(x.f)};
+      if (oracleResult.d != oracleResult.d && roundedResult.d != roundedResult.d) continue;
+      if (oracleResult.x != roundedResult.x && wrongResult < 10) wrongResult++;
+    }
+  }    
+  totalWrongResult += wrongResult;
+  
+  if (totalWrongResult == 0) {
+    fprintf(f, "Sampled inputs produce the 34RNO oracle result: check    \n");
+  } else {
+    fprintf(f, "Sampled inputs produce the 34RNO oracle result: incorrect\n");
   }
   if (totalWrongResult == 0) {
-    printf("FP reps with %d exp bits: \033[0;32mcheck\033[0m    \n", numExpBit);
+    printf("Sampled inputs produce the 34RNO oracle result: \033[0;32mcheck\033[0m    \n");
   } else {
-    printf("FP reps with %d exp bits: \033[0;31mincorrect\033[0m\n", numExpBit);
+    printf("Sampled inputs produce the 34RNO oracle result: \033[0;31mincorrect\033[0m\n");
   }
   return totalWrongResult;
 }
 
 void RunTest(char* logFile, char* FuncName) {
+  mpfr_init2(mval, 25);
+  mpfr_set_emin(-150);
+  mpfr_set_emax(128);
   FILE* f = fopen(logFile, "w");
   fprintf(f, "Function: %s\n", FuncName);
   printf("Function: %s\n", FuncName);
-  for (int i = 3; i <= 8; i++) {
-    RunTestForExponent(i, f, FuncName);
-  }
+  RunTestOracle(f, FuncName);
   fclose(f);
 }

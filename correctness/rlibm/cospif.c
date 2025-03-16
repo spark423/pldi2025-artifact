@@ -1,6 +1,6 @@
 #define __ELEM__ rlibm_cospif
 #define __MPFR_ELEM__ mpfr_cospi
-#include "LibTestHelperSpecialCases.h"
+#include "LibTestHelper.h"
 
 int main(int argc, char** argv) {
     if (argc != 2) {
@@ -8,6 +8,6 @@ int main(int argc, char** argv) {
         exit(0);
     }
     unsigned special_cases[] = {};
-    RunTest(argv[1], "Original RLIBM cospif without RNE", special_cases);
+    RunTest(argv[1], "Original RLIBM cospif without RNE");
     return 0;
 }

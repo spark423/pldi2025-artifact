@@ -1,13 +1,12 @@
 #define __ELEM__ log
 #define __MPFR_ELEM__ mpfr_log
-#include "LibTestHelperSpecialCases.h"
+#include "LibTestHelper.h"
 
 int main(int argc, char** argv) {
     if (argc != 2) {
         printf("Usage: %s <log file>\n", argv[0]);
         exit(0);
     }
-    unsigned special_cases[] = {0x3c413d3a, 0x41178feb, 0x4c5d65a5, 0x65d890d3, 0x6f31a8ec};
-    RunTest(argv[1], "glibc double log", special_cases);
+    RunTest(argv[1], "glibc double log");
     return 0;
 }
