@@ -130,9 +130,6 @@ SinP1-RZ: SinP1.cpp
 SinP1-MULTI: SinP1.cpp
 	$(CC) -O3 -frounding-math -fsignaling-nans -DRNDZ -DMULTI -I../helper -I../include SinP1.cpp -o SinP1-MULTI $(FLAGS)
 
-SinP1-MULTI-FMA: SinP1.cpp
-	$(CC) -O3 -march=native -frounding-math -fsignaling-nans -DRNDZ -DMULTI -DFMA -I../helper -I../include SinP1.cpp -o SinP1-MULTI-FMA $(FLAGS)
-
 SinP2-RN: SinP2.cpp
 	$(CC) -O3 -frounding-math -fsignaling-nans -I../helper -I../include SinP2.cpp -o SinP2-RN $(FLAGS)
 
