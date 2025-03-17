@@ -10,7 +10,7 @@ obj = $(patsubst %, %, $(funcs))
 all: $(obj)
 
 %: %.c
-	$(CC) -O3 -I../ -I../../include  $^ ../../libm/libm.a -lm -lmpfr -lgmp -o $@
+	$(CC) -O3 -I../ -I../../helper -I../../include  $^ ../../libm/libm.a -lm -lmpfr -lgmp -o $@
 
 clean:
 	rm -rf *.o $(funcs) *~ 
