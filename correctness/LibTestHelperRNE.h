@@ -1,12 +1,14 @@
 #define _GNU_SOURCE
 #pragma STDC FENV_ACCESS on
+#include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <fcntl.h>
 #include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
-#include "mpfr.h"
 
 #include "libm.h"
 #include "RoundToOdd.h"
@@ -77,19 +79,19 @@ unsigned long RunTestOracle(FILE* f, char* FuncName) {
   float_x x;
   unsigned long wrongResult = 0; 
   unsigned long upperlimit = 1lu << (unsigned long)32;
-  unsigned step = 1u << 10;
-  for (unsigned long count = 0x0; count < upperlimit; count += step) {
+  for (unsigned long count = 0x0; count < upperlimit; count += 1) {
     x.x = count;
     double_x oracleResult = {.d = ComputeOracleResult(x.f, mval)};
+    int all_correct = 1;
     double res = __ELEM__(x.f);
     double_x roundedResult = {.d = RoundToFloat34RNO(res)};
     if (oracleResult.d != oracleResult.d && roundedResult.d != roundedResult.d) continue;
     if (oracleResult.x != roundedResult.x) wrongResult++;
-  }    
+  }
   if (wrongResult == 0) {
-    printf("Sampled inputs produce the 34RNO oracle result: \033[0;32mcheck\033[0m    \n");
+    printf("Sampled inputs produce the 34RNO oracle result -> \033[0;32mcheck\033[0m    \n");
   } else {
-    printf("Sampled inputs produce the 34RNO oracle result: \033[0;31mincorrect\033[0m\n");
+    printf("Sampled inputs produce the 34RNO oracle result -> \033[0;31mincorrect\033[0m\n");
   }
   return wrongResult;
 }
