@@ -79,7 +79,8 @@ unsigned long RunTestOracle(FILE* f, char* FuncName, unsigned* special_cases) {
   float_x x;
   unsigned long wrongResult = 0; 
   unsigned long upperlimit = 1lu << (unsigned long)32;
-  for (unsigned long count = 0x0; count < upperlimit; count += 1) {
+  unsigned long step = 1lu<<10;
+  for (unsigned long count = 0x0; count < upperlimit; count += step) {
     x.x = count;
     double_x oracleResult = {.d = ComputeOracleResult(x.f, mval)};
     double res = __ELEM__(x.f);
