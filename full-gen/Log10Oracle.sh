@@ -1,7 +1,6 @@
 #!/bin/bash
 cd ../
 mkdir -p oracles
-touch Log1034RNOOracle
 cd oracle-gen
 make -s
 echo -e "Generating the 34RNO oracle for log10. Estimated time: approximately 90 mins."

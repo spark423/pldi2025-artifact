@@ -135,7 +135,7 @@ void print_polyinfo(FILE* polynomial_file_fp, polynomial* p){
     exit(0);
   }
   
-  fprintf(polynomial_file_fp, "Polynomial: y=%a x^(%d)",p->coeffs[0],p->power[0]);
+  fprintf(polynomial_file_fp, "//Polynomial: y=%a x^(%d)",p->coeffs[0],p->power[0]);
   for(int j=1;j<p->termsize;j++){
     fprintf(polynomial_file_fp, " + %a x^(%d)",p->coeffs[j],p->power[j]);
   }
@@ -224,9 +224,9 @@ int create_polynomial(FILE* interval_file_fp, FILE* polynomial_file_fp, vector<i
       if(n_violated_indices <= violate_threshold){
 	if (n_violated_indices) fprintf(polynomial_file_fp, "Polynomial with violated inputs:\n");
 	for(size_t m = 0; m < n_violated_indices; m++){		
-	  if (m) fprintf(polynomial_file_fp, "else if (__builtin_expect(xp == %a, 0)) y = %a;\n", intervals[violated_indices[m]].x, (intervals[violated_indices[m]].lb+intervals[violated_indices[m]].ub)/2);
-	  else fprintf(polynomial_file_fp, "if (__builtin_expect(xp == %a, 0)) y = %a;\n", intervals[violated_indices[m]].x, (intervals[violated_indices[m]].lb+intervals[violated_indices[m]].ub)/2);
-	  if (m == n_violated_indices - 1) fprintf(polynomial_file_fp, "else {\n");
+	  if (m) fprintf(polynomial_file_fp, "else if (__builtin_expect(reduced_input == %a, 0)) y = %a;\n", intervals[violated_indices[m]].x, (intervals[violated_indices[m]].lb+intervals[violated_indices[m]].ub)/2);
+	  else fprintf(polynomial_file_fp, "if (__builtin_expect(reduced_input == %a, 0)) y = %a;\n", intervals[violated_indices[m]].x, (intervals[violated_indices[m]].lb+intervals[violated_indices[m]].ub)/2);
+	  if (m == n_violated_indices - 1) fprintf(polynomial_file_fp, "else {\n ");
 	}
 	print_polyinfo(polynomial_file_fp, p);
 	if (n_violated_indices) fprintf(polynomial_file_fp, "\n}\n");
@@ -274,7 +274,7 @@ int create_polynomial(FILE* interval_file_fp, FILE* polynomial_file_fp, vector<i
   } while(n_violated_indices > 0 || !p);
 
   if(p){
-    print_polyinfo(polynomial_file_fp, p);
+    printf("Polynomial has been written to the log file\n");
   }
   else {
     printf("Could not generate the polynomial that satisifies all intervals, check for partial results with a few violated intervals\n");
