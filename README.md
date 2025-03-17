@@ -1,32 +1,38 @@
-Correctly Rounded Math Libraries Without Worrying about the Application’s Rounding Mode
+Artifact for the PLDI 2025 paper "Correctly Rounded Math Libraries Without Worrying about the Application’s Rounding Mode"
 ---
 
-Abstract:
+## Abstract:
 
-We present the artifact for the accepted paper, Correctly Rounded Math Libraries Without Worrying about the Application’s Rounding Mode. We describe the list of claims made by the paper, the installation instructions, and evaluation instructions. To ease the installation effort, we provide a docker image with all required softwares installed already. 
+We present the artifact for our PLDI 2025 paper, "Correctly Rounded
+Math Libraries Without Worrying about the Application’s Rounding
+Mode". We describe the list of claims made by the paper, the
+installation instructions, and evaluation instructions. To ease the
+installation effort, we provide a docker image with all required
+software already installed.
 
 ---
 
-Table of Content:
+## Table of Contents
 
 1\. Hardware recommendation \
-2\. Claims made from the paper \
+2\. Claims made in the paper \
 3\. Installation Guide \
-4\. EVALUATION GUIDE FOR THE ARTIFACT \
+4\. Evaluation Guide for the Artifact \
 (1) Check the correctness of OurLibm \
 (2) Check the correctness of mainstream math libraries \
 (3) Check the correctness of RLIBM with and without RNE (round-to-nearest-ties-to-even) \
-(4) Check the performance of OurLibm against RLIBM
+(4) Check the performance of OurLibm against RLIBM \
+(5) Instructions to Generate Functions with our Approach \
 
 ---
 
-1\. Hardware recommendation:
+## Hardware recommendation
 
 All of our evaluations were performed on an AMD EPYC 7313P machine with a 3.0GHz processor, which runs Ubuntu-24.04. However, we predict that the artifact should be functional with modern machines with 16GB of RAM, running Ubuntu-18.04 or later. For the ease of installation purposes, however, we recommend running the evaluation on Ubuntu-24.04. The docker image we provide also uses Ubuntu-24.04.
 
 ---
 
-2\. Claims made from the paper:
+## Claims made in the paper
 
 All claims to be evaluated in the artifact are found in Section 4. Experimental Evaluation.
 
@@ -36,18 +42,18 @@ All claims to be evaluated in the artifact are found in Section 4. Experimental 
 
 (3) When not running under RNE (round-to-nearest-ties-to-even), RLIBM does not produce correctly rounded results for all inputs, for all FP representations with up to 32-bits, and for all standard rounding modes, for several elementary functions (claimed in Table 1).
 
-(4) On average, OurLibm functions are faster than RLIBM's implementations with explicit rounding mode setitng via fegetround/fesetround (claimed in Figure 7).
+(4) On average, OurLibm functions are faster than RLIBM's implementations with explicit rounding mode setting via fegetround/fesetround (claimed in Figure 7).
 
 ---
-3\. Installation guide:
+## Installation guide:
 
-We have prebuilt a docker image and hosted it in the docker hub.
+We have pre-built a docker image and hosted it in the docker hub.
 
 (1) Install docker if not already installed by following the installation documentation in this link: https://docs.docker.com/install/
 
 We recommend installing docker and evaluating our artifact on a machine with Ubuntu. Although docker can be used with Windows or MacOS, docker may run on top of a linux VM.
 
-(2) Download the prebuilt docker image by using the command:
+(2) Download the pre-built docker image by using the command:
 ```
 $ sudo docker pull spark0423/pldi2025artifact
 ```
@@ -63,7 +69,7 @@ $ sudo docker run -it spark0423/pldi2025artifact
 
 ---
 
-4\. EVALUATION GUIDE:
+## EVALUATION GUIDE:
 
 (1) Check the correctness of OurLibm (Claim 1):
 
@@ -111,4 +117,7 @@ To test the speedup of both the rounding-invariant input bounds and outputs meth
 ``` 
 $ ./OverheadTest.sh
 ```
-This script will take roughly 2 hours. For each function, this script executes three different implementations: rounding-invariant input bounds, rounding-invariant outputs, and RLIBM with the fesetround calls. The script executes each implementation on all binary32 FP inputs and collects the aggregate cycles. Once the script terminates, you will see the following file 'speeup_over_rlibm.pdf'. The file contains the contents of Figure 7.
+This script will take roughly 2 hours. For each function, this script executes three different implementations: rounding-invariant input bounds, rounding-invariant outputs, and RLIBM with the fesetround calls. The script executes each implementation on all binary32 FP inputs and collects the aggregate cycles. Once the script terminates, you will see the following file 'speedup_over_rlibm.pdf'. The file contains the contents of Figure 7.
+
+
+## Generation of functions with our approach
