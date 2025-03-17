@@ -6,7 +6,7 @@ make -s
 cd ../../polynomial-gen
 make -s
 echo -e "Generating the 1st small case polynomial for cos."
-./CosSmall-RI-Outputs ../intervals/sin_small_p1 ../polynomials/cos_small_ri_outputs_p1 0
+./CosSmall-RI-Outputs ../intervals/cos_small_p1 ../polynomials/cos_small_ri_outputs_p1 0
 echo -e "Polynomial generation complete."
 echo -e "Generating the 2nd small case polynomial for cos."
 ./Cos-RI-Outputs ../intervals/cos_small_p2 ../polynomials/cos_small_ri_outputs_p2 0

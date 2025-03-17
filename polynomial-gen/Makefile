@@ -125,7 +125,7 @@ Log2-RI-Inputs.o: Log2.cpp
 Log2-RI-Inputs: %: ../helper/polynomial-gen/PolyGen.o Log2-RI-Inputs.o 
 	$(CC) $^ $(LD_FLAGS) -o $@
 
-Log10-RLIBM.o: Log.cpp
+Log10-RLIBM.o: LogRLIBM.cpp
 	$(CC) $(CPP_FLAGS) -DEXIT_ON_THRESHOLD -c $< -o $@ $(INCLUDE)
 
 Log10-RLIBM: %: ../helper/polynomial-gen/PolyGen.o Log10-RLIBM.o 
