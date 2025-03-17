@@ -20,5 +20,5 @@ echo "\033[1m* When each function is completely tested, it will print the result
 echo "\033[1m* In the mean time, you can check the progress in /correctness/results/rlibm/<function name>.txt\033[0m"
 echo "\033[1m\tRunning testing script in parallel\033[0m"
 echo "\033[1m\tParallelism: $parallelism jobs\033[0m"
-echo "\033[1m\tEstimated time: > 24 hours \033[0m"
+echo "\033[1m\tEstimated time: > 4 hours \033[0m"
 cat ParallelCommandRLIBM.txt | parallel -j $parallelism

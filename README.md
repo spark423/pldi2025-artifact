@@ -79,7 +79,7 @@ $ ./CorrectnessTestOurLibm.sh
 ```
 This script will take roughly 20 minutes. This script tests whether both the rounding-invariant input bounds and rounding-invariant outputs implementations in our library produce the correctly rounded results for uniformly sampled FP inputs with different number of exponent and mantissa bits under all standard rounding modes. If the test is successful, you should see "check" in green text, for each elementary function and representation for each method. Otherwise, it will print "incorrect" in red text, which signifies that the test has failed.
 
-We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. However, we really don't recommend running this for artifact evaluation purposes, as this will take > 24 hours, even when run in parallel...
+We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. However, we don't recommend running this for artifact evaluation purposes, as this will take > 4 hours, even when run in parallel...
 ```
 $ ./CorrectnessTestFullOurLibm.sh
 ```
@@ -91,7 +91,7 @@ $ ./CorrectnessTestOther.sh
 ```
 This script will take roughly 20 minutes. The testing method is nearly identical to that for our library with the following difference: for functions for which the inputs with incorrect results are known, the inputs are included in the sample. This test corresponds to the columns for CORE-MATH and glibc in Table 1.
 
-We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. The test is expected to take over 24 hours.
+We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. The test is expected to take over 4 hours.
 
 ```
 $ ./CorrectnessTestFullOther.sh
@@ -108,7 +108,7 @@ This script will take roughly 20 minutes. The testing method is the same as that
 $ ./CorrectnessTestFullRLIBM.sh
 ```
 
-As is the case with the other full-scale tests, the test is expected to take a prohibitively long time for artifact evaluation purposes.
+As is the case with the other full-scale tests, the test is expected to take over 4 hours.
 
 (4) Check the performance of our library against RLIBM with rounding mode changes (Claim 4):
 
@@ -122,7 +122,7 @@ This script will take roughly 2 hours. For each function, this script executes t
 
 ## Generation of functions with our approach
 
-We provide scripts to generate the oracle results for all our functions. For each function, we also provide scripts to generate intervals and polynomials using the three methods discussed in the paper: the default RLIBM method, the rounding-invariant outputs method, and the rounding-invariant input bounds method (see Interval and Polynomial Generation). We provide instructions to run the relevant scripts for each function.  
+We provide scripts to generate the oracle results for all our functions. The oracle generation scripts are expected to complete within roughly 2 hours for all the functions. For each function, we also provide scripts to generate intervals and polynomials using the three methods discussed in the paper: the default RLIBM method, the rounding-invariant outputs method, and the rounding-invariant input bounds method (see Interval and Polynomial Generation). We provide instructions to run the relevant scripts for each function.  
 
 ### Oracle Generation
 
@@ -427,7 +427,7 @@ After generating the intervals, run the following command in the full-gen direct
 ```
 $ ./Exp2-RLIBM-Poly.sh
 ```
-Upon completion, the coefficients of the polynomial used for the RLIBM exp2 function will be available in the following files in the 'polynomials' directory: exp2_rlibm.
+Upon completion, the coefficients of the polynomial used for the RLIBM exp2 function will be available in the following file in the 'polynomials' directory: exp2_rlibm.
 
 (b) Rounding-invariant outputs method
 
@@ -457,7 +457,7 @@ After generating the intervals, run the following command in the full-gen direct
 ```
 $ ./Exp2-RI-Inputs-Poly.sh
 ```
-Upon completion, the coefficients of the the polynomial used for the rounding-invariant input bounds exp2 function will be available in the following files in the 'polynomials' directory: exp2_ri_inputs.
+Upon completion, the coefficients of the the polynomial used for the rounding-invariant input bounds exp2 function will be available in the following file in the 'polynomials' directory: exp2_ri_inputs.
 
 (6) Generating intervals and polynomials for exp10
 
@@ -568,7 +568,7 @@ After generating the intervals, run the following command in the full-gen direct
 ```
 $ ./Log2-RLIBM-Poly.sh
 ```
-Upon completion, the coefficients of the polynomial used for the RLIBM log2 function will be available in the following files in the 'polynomials' directory: log2_rlibm.
+Upon completion, the coefficients of the polynomial used for the RLIBM log2 function will be available in the following file in the 'polynomials' directory: log2_rlibm.
 
 (b) Rounding-invariant outputs method
 
@@ -598,7 +598,7 @@ After generating the intervals, run the following command in the full-gen direct
 ```
 $ ./Log2-RI-Inputs-Poly.sh
 ```
-Upon completion, the coefficients of the the polynomial used for the rounding-invariant input bounds log2 function will be available in the following files in the 'polynomials' directory: log2_ri_inputs.
+Upon completion, the coefficients of the the polynomial used for the rounding-invariant input bounds log2 function will be available in the following file in the 'polynomials' directory: log2_ri_inputs.
 
 (9) Generating intervals and polynomials for log10
 
@@ -634,7 +634,7 @@ Upon completion, the coefficients of the four polynomials used for the rounding-
 
 (c) Rounding-invariant input bounds method
 
-To generate intervals for log using the rounding-invariant input bounds method, run the following commands.
+To generate intervals for log10 using the rounding-invariant input bounds method, run the following commands.
 
 ```
 $ cd full-gen/
@@ -668,7 +668,7 @@ Upon completion, the coefficients of the five polynomials used for the RLIBM sin
 
 (b) Rounding-invariant outputs method
 
-To generate intervals for cos using the rounding-invariant outputs method, run the following commands. Note that the script SinSmallInterval.sh only needs to be run once for sin since this specific interval generation process is not method dependent.
+To generate intervals for sin using the rounding-invariant outputs method, run the following commands. Note that the script SinSmallInterval.sh only needs to be run once for sin since this specific interval generation process is not method dependent.
 
 ```
 $ cd full-gen/
@@ -684,7 +684,7 @@ Upon completion, the coefficients of the five polynomials used for the rounding-
 
 (c) Rounding-invariant input bounds method
 
-To generate intervals for cos using the rounding-invariant input bounds method, run the following commands. Note that the script SinSmallInterval.sh only needs to be run once for cos since this specific interval generation process is not method dependent.
+To generate intervals for sin using the rounding-invariant input bounds method, run the following commands. Note that the script SinSmallInterval.sh only needs to be run once for sin since this specific interval generation process is not method dependent.
 
 ```
 $ cd full-gen/
@@ -696,7 +696,7 @@ After generating the intervals, run the following command in the full-gen direct
 ```
 $ ./Sin-RI-Inputs-Poly.sh
 ```
-Upon completion, the coefficients of the five polynomials used for the rounding-invariant input bounds cos function will be available in the following files in the 'polynomials' directory: sin_small_ri_inputs_p1, sin_small_ri_inputs_p2, sinsin_ri_inputs_p1, sincos_ri_inputs_p1, sinsin_ri_inputs_p2, and sincos_ri_inputs_p2.
+Upon completion, the coefficients of the five polynomials used for the rounding-invariant input bounds sin function will be available in the following files in the 'polynomials' directory: sin_small_ri_inputs_p1, sin_small_ri_inputs_p2, sinsin_ri_inputs_p1, sincos_ri_inputs_p1, sinsin_ri_inputs_p2, and sincos_ri_inputs_p2.
 
 (11) Generating intervals and polynomials for sinh\
 (a) Original RLIBM method
