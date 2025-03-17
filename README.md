@@ -34,7 +34,7 @@ All of our evaluations were performed on an AMD EPYC 7313P machine with a 3.0GHz
 
 ## Claims made in the paper
 
-All claims to be evaluated in the artifact are found in Section 4. Experimental Evaluation.
+All claims to be evaluated in the artifact are found in Section 4 of the paper (i.e., Experimental Evaluation).
 
 (1) Both our techniques (rounding-invariant input bounds and rounding-invariant outputs) successfully generate polynomials that produce correctly rounded results for all inputs in FP representations with up to 32-bits directly under all standard rounding modes (claimed in Table 1).
 
@@ -42,7 +42,7 @@ All claims to be evaluated in the artifact are found in Section 4. Experimental 
 
 (3) When not running under RNE (round-to-nearest-ties-to-even), RLIBM does not produce correctly rounded results for all inputs, for all FP representations with up to 32-bits, and for all standard rounding modes, for several elementary functions (claimed in Table 1).
 
-(4) On average, OurLibm functions are faster than RLIBM's implementations with explicit rounding mode setting via fegetround/fesetround (claimed in Figure 7).
+(4) On average, our functions are faster than RLIBM's implementations with explicit rounding mode setting via fegetround/fesetround (claimed in Figure 7).
 
 ---
 ## Installation guide:
