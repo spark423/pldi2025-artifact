@@ -22,7 +22,7 @@ software already installed.
 (2) Check the correctness of mainstream math libraries \
 (3) Check the correctness of RLIBM with and without RNE (round-to-nearest-ties-to-even) \
 (4) Check the performance of OurLibm against RLIBM \
-(5) Instructions to Generate Functions with our Approach \
+(5) Instructions to Generate Functions with our Approach 
 
 ---
 
