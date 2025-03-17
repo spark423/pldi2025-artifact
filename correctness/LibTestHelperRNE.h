@@ -17,11 +17,9 @@
 #define MAXm1VAL 3.40282356779733661637539395458142568448e+38
 
 mpfr_t mval;
+int fenv_rnd_modes[4] = {FE_TONEAREST, FE_DOWNWARD, FE_UPWARD, FE_TOWARDZERO};
 
 double ComputeOracleResult(float x, mpfr_t mval) {
-  if (x == 1.0 / 0.0) return 1.0 / 0.0;
-  if (x == 0) return -1.0 / 0.0;
-    
   // Set float value to mpfr. This should be exact
   int status = mpfr_set_d(mval, (double)x, MPFR_RNDN);
   if (status != 0) {
@@ -81,12 +79,17 @@ unsigned long RunTestOracle(FILE* f, char* FuncName) {
   unsigned long upperlimit = 1lu << (unsigned long)32;
   unsigned step = 1u << 10;
   for (unsigned long count = 0; count < upperlimit; count += step) {
-    x.x = count;
-    double_x oracleResult = {.d = ComputeOracleResult(x.f, mval)};
-    double res = __ELEM__(x.f);
-    double_x roundedResult = {.d = RoundToFloat34RNO(res)};
-    if (oracleResult.d != oracleResult.d && roundedResult.d != roundedResult.d) continue;
-    if (oracleResult.x != roundedResult.x && wrongResult < 10) wrongResult++;
+    for (int rnd_index = 0; rnd_index < 4; rnd_index++) {
+      x.x = count;
+      double_x oracleResult = {.d = ComputeOracleResult(x.f, mval)};
+      double res = __ELEM__(x.f);
+      double_x roundedResult = {.d = RoundToFloat34RNO(res)};
+      if (oracleResult.d != oracleResult.d && roundedResult.d != roundedResult.d) continue;
+      if (oracleResult.x != roundedResult.x && wrongResult < 10) {
+        printf("incorrect result found for count = %lx\n", count);
+        break;	
+      }
+    }
   }    
   totalWrongResult += wrongResult;
   

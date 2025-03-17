@@ -7,10 +7,6 @@
 // in 34-bit floating point representation.
 // The oracle must account for every special cases.
 double ComputeOracleResult(float x, mpfr_t mval) {
-  // TODO : Implement ComputeOracleResult
-  if (x == 1.0 / 0.0) return 1.0 / 0.0;
-  if (x == 0) return -1.0 / 0.0;
-    
   // Set float value to mpfr. This should be exact
   int status = mpfr_set_d(mval, (double)x, MPFR_RNDN);
   if (status != 0) {
