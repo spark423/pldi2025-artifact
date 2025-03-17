@@ -45,7 +45,7 @@ All claims to be evaluated in the artifact are found in Section 4 of the paper (
 (4) On average, our functions are faster than RLIBM's implementations with explicit rounding mode setting via fegetround/fesetround (claimed in Figure 7).
 
 ---
-## Installation guide:
+## Installation Guide
 
 We have pre-built a docker image and hosted it in the docker hub.
 
@@ -69,15 +69,15 @@ $ sudo docker run -it spark0423/pldi2025artifact
 
 ---
 
-## EVALUATION GUIDE:
+## Evaluation Guide
 
-(1) Check the correctness of OurLibm (Claim 1):
+(1) Check the correctness of our library (Claim 1):
 
-To test the correctness of OurLibm, run the bash script,
+To test the correctness of our library, run the bash script,
 ```
 $ ./CorrectnessTestOurLibm.sh
 ```
-This script will take roughly 20 minutes. This script tests whether both the rounding-invariant input bounds and rounding-invariant outputs implementations in OurLibm produce the correctly rounded results for uniformly sampled FP inputs with different number of exponent and mantissa bits under all standard rounding modes. If the test is successful, you should see "check" in green text, for each elementary function and representation for each method. Otherwise, it will print "incorrect" in red text, which signifies that the test has failed.
+This script will take roughly 20 minutes. This script tests whether both the rounding-invariant input bounds and rounding-invariant outputs implementations in our library produce the correctly rounded results for uniformly sampled FP inputs with different number of exponent and mantissa bits under all standard rounding modes. If the test is successful, you should see "check" in green text, for each elementary function and representation for each method. Otherwise, it will print "incorrect" in red text, which signifies that the test has failed.
 
 We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. However, we really don't recommend running this for artifact evaluation purposes, as this will take > 24 hours, even when run in parallel...
 ```
@@ -89,7 +89,7 @@ To test the correctness of mainstream math libraries (e.g., CORE-MATH and glibc)
 ```
 $ ./CorrectnessTestOther.sh
 ```
-This script will take roughly 20 minutes. The testing method is nearly identical to that for OurLibm with the following difference: for functions for which the inputs with incorrect results are known, the inputs are included in the sample. This test corresponds to the columns for CORE-MATH and glibc in Table 1.
+This script will take roughly 20 minutes. The testing method is nearly identical to that for our library with the following difference: for functions for which the inputs with incorrect results are known, the inputs are included in the sample. This test corresponds to the columns for CORE-MATH and glibc in Table 1.
 
 We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. The test is expected to take over 24 hours.
 
@@ -110,7 +110,7 @@ $ ./CorrectnessTestFullRLIBM.sh
 
 As is the case with the other full-scale tests, the test is expected to take a prohibitively long time for artifact evaluation purposes.
 
-(4) Check the performance of OurLibm against RLIBM (Claim 4):
+(4) Check the performance of our library against RLIBM with rounding mode changes (Claim 4):
 
 To test the speedup of both the rounding-invariant input bounds and outputs methods, run the bash script,
    
