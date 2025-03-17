@@ -78,17 +78,14 @@ unsigned long RunTestOracle(FILE* f, char* FuncName) {
   unsigned long wrongResult = 0, totalWrongResult = 0; 
   unsigned long upperlimit = 1lu << (unsigned long)32;
   unsigned step = 1u << 10;
-  for (unsigned long count = 0; count < upperlimit; count += step) {
+  for (unsigned long count = 0x0; count < upperlimit; count += step) {
     for (int rnd_index = 0; rnd_index < 4; rnd_index++) {
       x.x = count;
       double_x oracleResult = {.d = ComputeOracleResult(x.f, mval)};
       double res = __ELEM__(x.f);
       double_x roundedResult = {.d = RoundToFloat34RNO(res)};
       if (oracleResult.d != oracleResult.d && roundedResult.d != roundedResult.d) continue;
-      if (oracleResult.x != roundedResult.x && wrongResult < 10) {
-        printf("incorrect result found for count = %lx\n", count);
-        break;	
-      }
+      if (oracleResult.x != roundedResult.x && wrongResult < 10) wrongResult++;
     }
   }    
   totalWrongResult += wrongResult;

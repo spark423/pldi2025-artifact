@@ -26,6 +26,10 @@ double FromMPFRToFloat34Ro(mpfr_t mval, int sticky) {
   /* Handle cases where mval's absolute value is the second largest number in the 34-bit representation (which would be the largest number in mval's representation since it only has 25 bits of precision) and the sticky bit is set. */ 
   if ((mpfr_cmp_d(mval, sub_max_val) == 0) && (sticky != 0)) return max_val;
   if ((mpfr_cmp_d(mval, -sub_max_val) == 0) && (sticky != 0)) return -max_val;
+  /* Handle cases where mval's absolute value is smaller than the second smallest number in the 34-bit representation */
+  if ((mpfr_sgn(mval) > 0) && (mpfr_cmp_d(mval, ldexp(1, -150)) < 0)) return ldexp(1, -151);
+  if ((mpfr_sgn(mval) < 0) && (mpfr_cmp_d(mval, ldexp(-1, -150)) > 0)) return ldexp(-1, -151);
+
   /* Compare mval against the two normal numbers with the smallest absolute values to determine if it is subnormal. */
   bool pos_subnormal = (mpfr_sgn(mval) > 0) && (mpfr_cmp_d(mval, 0x1p-126) < 0);
   bool neg_subnormal = (mpfr_sgn(mval) < 0) && (mpfr_cmp_d(mval, -0x1p-126) > 0);
