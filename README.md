@@ -630,7 +630,7 @@ After generating the intervals, run the following command in the full-gen direct
 ```
 $ ./Log10-RI-Outputs-Poly.sh
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs log10 function will be available in the following files in the 'polynomials' directory: log10_ri_outputs_p1 and log10_ri_outputs_p2.
+Upon completion, the coefficients of the four polynomials used for the rounding-invariant outputs log10 function will be available in the following files in the 'polynomials' directory: log10_ri_outputs_p1, log10_ri_outputs_p2, log10_ri_outputs_p3, and log10_ri_outputs_p4.
 
 (c) Rounding-invariant input bounds method
 
@@ -645,7 +645,7 @@ After generating the intervals, run the following command in the full-gen direct
 ```
 $ ./Log10-RI-Inputs-Poly.sh
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds log10 function will be available in the following files in the 'polynomials' directory: log10_ri_inputs_p1 and log10_ri_inputs_p2.
+Upon completion, the coefficients of the four polynomials used for the rounding-invariant input bounds log10 function will be available in the following files in the 'polynomials' directory: log10_ri_inputs_p1, log10_ri_inputs_p2, log_ri_inputs_p3, and log_ri_inputs_p4.
 
 
 (10) Generating intervals and polynomials for sin
