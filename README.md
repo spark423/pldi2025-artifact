@@ -1,4 +1,4 @@
-rtifact for the PLDI 2025 paper "Correctly Rounded Math Libraries Without Worrying about the Application’s Rounding Mode"
+Artifact for the PLDI 2025 paper "Correctly Rounded Math Libraries Without Worrying about the Application’s Rounding Mode"
 ---
 
 ## Abstract:
