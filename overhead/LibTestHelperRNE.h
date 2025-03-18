@@ -33,7 +33,9 @@ void RunTest(char* filename) {
       nan = nan + 1.0;
     } else{
       float float_res = res;
-      sum = sum +  float_res;
+      if (!isnan(float_res) && !isinf(float_res)) { 
+	sum = sum + float_res;
+      }
     }
     time_total += (time_t2 - time_t1);
   }
