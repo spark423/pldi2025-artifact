@@ -1,4 +1,4 @@
-Artifact for the PLDI 2025 paper "Correctly Rounded Math Libraries Without Worrying about the Application’s Rounding Mode"
+rtifact for the PLDI 2025 paper "Correctly Rounded Math Libraries Without Worrying about the Application’s Rounding Mode"
 ---
 
 ## Abstract:
@@ -122,7 +122,7 @@ This script will take roughly 2 hours. For each function, this script executes t
 
 ## Generation of functions with our approach
 
-We provide scripts to generate the oracle results for all our functions. The oracle generation scripts are expected to complete within roughly 2 hours for all the functions. For each function, we also provide scripts to generate intervals and polynomials using the three methods discussed in the paper: the default RLIBM method, the rounding-invariant outputs method, and the rounding-invariant input bounds method (see Interval and Polynomial Generation). We provide instructions to run the relevant scripts for each function.  
+We provide scripts to generate the oracle results for all our functions. The oracle generation scripts are expected to complete within roughly 2 hours for all the functions. The size of the oracle file for each function is 32GB. For each function, we also provide scripts to generate intervals and polynomials using the three methods discussed in the paper: the default RLIBM method, the rounding-invariant outputs method, and the rounding-invariant input bounds method (see Interval and Polynomial Generation). 
 
 ### Oracle Generation
 
@@ -233,12 +233,13 @@ $ cd full-gen/
 $ ./CosSmallInterval.sh
 $ ./Cos-RLIBM-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Cos-RLIBM-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the five polynomials used for the RLIBM cos function will be available in the following files in the 'polynomials' directory: cos_small_rlibm_p1, cos_small_rlibm_p2, cossin_rlibm_p1, coscos_rlibm_p1, cossin_rlibm_p2, and coscos_rlibm_p2.
+Upon completion, the coefficients of the five polynomials used for the RLIBM cos function will be available in the following files: **cos_small_rlibm_p1**, **cos_small_rlibm_p2**, **cossin_rlibm_p1**, **coscos_rlibm_p1**, **cossin_rlibm_p2**, and **coscos_rlibm_p2**.
 
 (b) Rounding-invariant outputs method
 
@@ -249,12 +250,13 @@ $ cd full-gen/
 $ ./CosSmallInterval.sh
 $ ./Cos-RI-Outputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Cos-RI-Outputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the five polynomials used for the rounding-invariant outputs cos function will be available in the following files in the 'polynomials' directory: cos_small_ri_outputs_p1, cos_small_ri_outputs_p2, cossin_ri_outputs_p1, coscos_ri_outputs_p1, cossin_ri_outputs_p2, and coscos_ri_outputs_p2.
+Upon completion, the coefficients of the five polynomials used for the rounding-invariant outputs cos function will be available in the following files: **cos_small_ri_outputs_p1**, **cos_small_ri_outputs_p2**, **cossin_ri_outputs_p1**, **coscos_ri_outputs_p1**, **cossin_ri_outputs_p2**, and **coscos_ri_outputs_p2**.
 
 (c) Rounding-invariant input bounds method
 
@@ -265,14 +267,16 @@ $ cd full-gen/
 $ ./CosSmallInterval.sh
 $ ./Cos-RI-Inputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Cos-RI-Inputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the five polynomials used for the rounding-invariant input bounds cos function will be available in the following files in the 'polynomials' directory: cos_small_ri_inputs_p1, cos_small_ri_inputs_p2, cossin_ri_inputs_p1, coscos_ri_inputs_p1, cossin_ri_inputs_p2, and coscos_ri_inputs_p2.
+Upon completion, the coefficients of the five polynomials used for the rounding-invariant input bounds cos function will be available in the following files: **cos_small_ri_inputs_p1**, **cos_small_ri_inputs_p2**, **cossin_ri_inputs_p1**, **coscos_ri_inputs_p1**, **cossin_ri_inputs_p2**, and **coscos_ri_inputs_p2**.
 
-(2) Generating intervals and polynomials for cosh\
+(2) Generating intervals and polynomials for cosh
+
 (a) Original RLIBM method
 
 To generate intervals for cosh using the original RLIBM method, run the following commands.
@@ -281,12 +285,13 @@ To generate intervals for cosh using the original RLIBM method, run the followin
 $ cd full-gen/
 $ ./Cosh-RLIBM-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Cosh-RLIBM-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the RLIBM cosh function will be available in the following files in the 'polynomials' directory: coshcos_rlibm and coshsin_rlibm.
+Upon completion, the coefficients of the two polynomials used for the RLIBM cosh function will be available in the following files: **coshcos_rlibm** and **coshsin_rlibm**.
 
 (b) Rounding-invariant outputs method
 
@@ -296,12 +301,13 @@ To generate intervals for cosh using the rounding-invariant outputs method, run 
 $ cd full-gen/
 $ ./Cosh-RI-Outputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Cosh-RI-Outputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs cosh function will be available in the following files in the 'polynomials' directory: coshcos_ri_outputs and coshsin_ri_outputs.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs cosh function will be available in the following files: **coshcos_ri_outputs** and **coshsin_ri_outputs**.
 
 (c) Rounding-invariant input bounds method
 
@@ -311,12 +317,13 @@ To generate intervals for cosh using the rounding-invariant input bounds method,
 $ cd full-gen/
 $ ./Cosh-RI-Inputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Cosh-RI-Inputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds cosh function will be available in the following files in the 'polynomials' directory: coshcos_ri_inputs and coshsin_ri_inputs.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds cosh function will be available in the following files: **coshcos_ri_inputs** and **coshsin_ri_inputs**.
 
 (3) Generating intervals and polynomials for cospi
 
@@ -328,12 +335,13 @@ To generate intervals for cospi using the original RLIBM method, run the followi
 $ cd full-gen/
 $ ./Cospi-RLIBM-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Cospi-RLIBM-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the RLIBM cospi function will be available in the following files in the 'polynomials' directory: cospicos_rlibm and cospisin_rlibm.
+Upon completion, the coefficients of the two polynomials used for the RLIBM cospi function will be available in the following files: **cospicos_rlibm** and **cospisin_rlibm**.
 
 (b) Rounding-invariant outputs method
 
@@ -343,12 +351,13 @@ To generate intervals for cospi using the rounding-invariant outputs method, run
 $ cd full-gen/
 $ ./Cospi-RI-Outputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Cospi-RI-Outputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs cospi function will be available in the following files in the 'polynomials' directory: cospicos_ri_outputs and cospisin_ri_outputs.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs cospi function will be available in the following files: **cospicos_ri_outputs** and **cospisin_ri_outputs**.
 
 (c) Rounding-invariant input bounds method
 
@@ -358,12 +367,13 @@ To generate intervals for cospi using the rounding-invariant input bounds method
 $ cd full-gen/
 $ ./Cospi-RI-Inputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Cospi-RI-Inputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds cospi function will be available in the following files in the 'polynomials' directory: cospicos_ri_inputs and cospisin_ri_inputs.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds cospi function will be available in the following files: **cospicos_ri_inputs** and **cospisin_ri_inputs**.
 
 (4) Generating intervals and polynomials for exp
 
@@ -375,12 +385,13 @@ To generate intervals for exp using the original RLIBM method, run the following
 $ cd full-gen/
 $ ./Exp-RLIBM-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Exp-RLIBM-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the RLIBM exp function will be available in the following files in the 'polynomials' directory: exp_rlibm_p1 and exp_rlibm_p2.
+Upon completion, the coefficients of the two polynomials used for the RLIBM exp function will be available in the following files: **exp_rlibm_p1** and **exp_rlibm_p2**.
 
 (b) Rounding-invariant outputs method
 
@@ -390,12 +401,13 @@ To generate intervals for exp using the rounding-invariant outputs method, run t
 $ cd full-gen/
 $ ./Exp-RI-Outputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Exp-RI-Outputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs exp function will be available in the following files in the 'polynomials' directory: exp_ri_outputs_p1 and exp_ri_outputs_p2.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs exp function will be available in the following files: **exp_ri_outputs_p1** and **exp_ri_outputs_p2**.
 
 (c) Rounding-invariant input bounds method
 
@@ -405,12 +417,13 @@ To generate intervals for exp using the rounding-invariant input bounds method, 
 $ cd full-gen/
 $ ./Exp-RI-Inputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Exp-RI-Inputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds exp function will be available in the following files in the 'polynomials' directory: exp_ri_inputs_p1 and exp_ri_inputs_p2.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds exp function will be available in the following files: **exp_ri_inputs_p1** and **exp_ri_inputs_p2**.
 
 (5) Generating intervals and polynomials for exp2
 
@@ -422,12 +435,13 @@ To generate intervals for exp2 using the original RLIBM method, run the followin
 $ cd full-gen/
 $ ./Exp2-RLIBM-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Exp2-RLIBM-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the polynomial used for the RLIBM exp2 function will be available in the following file in the 'polynomials' directory: exp2_rlibm.
+Upon completion, the coefficients of the polynomial used for the RLIBM exp2 function will be available in the following file: **exp2_rlibm**.
 
 (b) Rounding-invariant outputs method
 
@@ -437,12 +451,13 @@ To generate intervals for exp2 using the rounding-invariant outputs method, run 
 $ cd full-gen/
 $ ./Exp2-RI-Outputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Exp2-RI-Outputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the polynomial used for the rounding-invariant outputs exp2 function will be available in the following file in the 'polynomials' directory: exp2_ri_outputs.
+Upon completion, the coefficients of the polynomial used for the rounding-invariant outputs exp2 function will be available in the following file: **exp2_ri_outputs**.
 
 (c) Rounding-invariant input bounds method
 
@@ -452,12 +467,13 @@ To generate intervals for exp2 using the rounding-invariant input bounds method,
 $ cd full-gen/
 $ ./Exp2-RI-Inputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Exp2-RI-Inputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the the polynomial used for the rounding-invariant input bounds exp2 function will be available in the following file in the 'polynomials' directory: exp2_ri_inputs.
+Upon completion, the coefficients of the the polynomial used for the rounding-invariant input bounds exp2 function will be available in the following file: **exp2_ri_inputs**.
 
 (6) Generating intervals and polynomials for exp10
 
@@ -469,12 +485,13 @@ To generate intervals for exp10 using the original RLIBM method, run the followi
 $ cd full-gen/
 $ ./Exp10-RLIBM-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Exp10-RLIBM-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the RLIBM exp10 function will be available in the following files in the 'polynomials' directory: exp10_rlibm_p1 and exp10_rlibm_p2.
+Upon completion, the coefficients of the two polynomials used for the RLIBM exp10 function will be available in the following files: **exp10_rlibm_p1** and **exp10_rlibm_p2**.
 
 (b) Rounding-invariant outputs method
 
@@ -484,12 +501,13 @@ To generate intervals for exp10 using the rounding-invariant outputs method, run
 $ cd full-gen/
 $ ./Exp10-RI-Outputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Exp10-RI-Outputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs exp10 function will be available in the following files in the 'polynomials' directory: exp10_ri_outputs_p1 and exp10_ri_outputs_p2.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs exp10 function will be available in the following files: **exp10_ri_outputs_p1** and **exp10_ri_outputs_p2**.
 
 (c) Rounding-invariant input bounds method
 
@@ -499,12 +517,13 @@ To generate intervals for exp10 using the rounding-invariant input bounds method
 $ cd full-gen/
 $ ./Exp10-RI-Inputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Exp10-RI-Inputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds exp10 function will be available in the following files in the 'polynomials' directory: exp10_ri_inputs_p1 and exp10_ri_inputs_p2.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds exp10 function will be available in the following files: **exp10_ri_inputs_p1** and **exp10_ri_inputs_p2**.
 
 (7) Generating intervals and polynomials for log
 
@@ -516,12 +535,13 @@ To generate intervals for log using the original RLIBM method, run the following
 $ cd full-gen/
 $ ./Log-RLIBM-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Log-RLIBM-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the polynomial used for the RLIBM log function will be available in the following file in the 'polynomials' directory: log_rlibm.
+Upon completion, the coefficients of the polynomial used for the RLIBM log function will be available in the following file: **log_rlibm**.
 
 (b) Rounding-invariant outputs method
 
@@ -531,12 +551,13 @@ To generate intervals for log using the rounding-invariant outputs method, run t
 $ cd full-gen/
 $ ./Log-RI-Outputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Log-RI-Outputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs log function will be available in the following files in the 'polynomials' directory: log_ri_outputs_p1 and log_ri_outputs_p2.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs log function will be available in the following files: **log_ri_outputs_p1** and **log_ri_outputs_p2**.
 
 (c) Rounding-invariant input bounds method
 
@@ -546,12 +567,13 @@ To generate intervals for log using the rounding-invariant input bounds method, 
 $ cd full-gen/
 $ ./Log-RI-Inputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Log-RI-Inputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds log function will be available in the following files in the 'polynomials' directory: log_ri_inputs_p1 and log_ri_inputs_p2.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds log function will be available in the following files: **log_ri_inputs_p1** and **log_ri_inputs_p2**.
 
 (8) Generating intervals and polynomials for log2
 
@@ -563,12 +585,13 @@ To generate intervals for log2 using the original RLIBM method, run the followin
 $ cd full-gen/
 $ ./Log2-RLIBM-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Log2-RLIBM-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the polynomial used for the RLIBM log2 function will be available in the following file in the 'polynomials' directory: log2_rlibm.
+Upon completion, the coefficients of the polynomial used for the RLIBM log2 function will be available in the following file: **log2_rlibm**.
 
 (b) Rounding-invariant outputs method
 
@@ -578,12 +601,13 @@ To generate intervals for log2 using the rounding-invariant outputs method, run 
 $ cd full-gen/
 $ ./Log2-RI-Outputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Log2-RI-Outputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the polynomial used for the rounding-invariant outputs log2 function will be available in the following file in the 'polynomials' directory: log2_ri_outputs.
+Upon completion, the coefficients of the polynomial used for the rounding-invariant outputs log2 function will be available in the following file: **log2_ri_outputs**.
 
 (c) Rounding-invariant input bounds method
 
@@ -593,12 +617,13 @@ To generate intervals for log2 using the rounding-invariant input bounds method,
 $ cd full-gen/
 $ ./Log2-RI-Inputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Log2-RI-Inputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the the polynomial used for the rounding-invariant input bounds log2 function will be available in the following file in the 'polynomials' directory: log2_ri_inputs.
+Upon completion, the coefficients of the the polynomial used for the rounding-invariant input bounds log2 function will be available in the following file: **log2_ri_inputs**.
 
 (9) Generating intervals and polynomials for log10
 
@@ -610,12 +635,13 @@ To generate intervals for log10 using the original RLIBM method, run the followi
 $ cd full-gen/
 $ ./Log10-RLIBM-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Log10-RLIBM-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the polynomial used for the RLIBM log10 function will be available in the following file in the 'polynomials' directory: log10_rlibm.
+Upon completion, the coefficients of the polynomial used for the RLIBM log10 function will be available in the following file: **log10_rlibm**.
 
 (b) Rounding-invariant outputs method
 
@@ -625,12 +651,13 @@ To generate intervals for log10 using the rounding-invariant outputs method, run
 $ cd full-gen/
 $ ./Log10-RI-Outputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Log10-RI-Outputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the four polynomials used for the rounding-invariant outputs log10 function will be available in the following files in the 'polynomials' directory: log10_ri_outputs_p1, log10_ri_outputs_p2, log10_ri_outputs_p3, and log10_ri_outputs_p4.
+Upon completion, the coefficients of the four polynomials used for the rounding-invariant outputs log10 function will be available in the following files: **log10_ri_outputs_p1**, **log10_ri_outputs_p2**, **log10_ri_outputs_p3**, and **log10_ri_outputs_p4**.
 
 (c) Rounding-invariant input bounds method
 
@@ -640,12 +667,13 @@ To generate intervals for log10 using the rounding-invariant input bounds method
 $ cd full-gen/
 $ ./Log10-RI-Inputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Log10-RI-Inputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the four polynomials used for the rounding-invariant input bounds log10 function will be available in the following files in the 'polynomials' directory: log10_ri_inputs_p1, log10_ri_inputs_p2, log_ri_inputs_p3, and log_ri_inputs_p4.
+Upon completion, the coefficients of the four polynomials used for the rounding-invariant input bounds log10 function will be available in the following files: **log10_ri_inputs_p1**, **log10_ri_inputs_p2**, **log_ri_inputs_p3**, and **log_ri_inputs_p4**.
 
 
 (10) Generating intervals and polynomials for sin
@@ -659,12 +687,13 @@ $ cd full-gen/
 $ ./SinSmallInterval.sh
 $ ./Sin-RLIBM-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Sin-RLIBM-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the five polynomials used for the RLIBM sin function will be available in the following files in the 'polynomials' directory: sin_small_rlibm_p1, sin_small_rlibm_p2, sinsin_rlibm_p1, sincos_rlibm_p1, sinsin_rlibm_p2, and sincos_rlibm_p2.
+Upon completion, the coefficients of the five polynomials used for the RLIBM sin function will be available in the following files: **sin_small_rlibm_p1**, **sin_small_rlibm_p2**, **sinsin_rlibm_p1**, **sincos_rlibm_p1**, **sinsin_rlibm_p2**, and **sincos_rlibm_p2**.
 
 (b) Rounding-invariant outputs method
 
@@ -675,12 +704,13 @@ $ cd full-gen/
 $ ./SinSmallInterval.sh
 $ ./Sin-RI-Outputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Sin-RI-Outputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the five polynomials used for the rounding-invariant outputs sin function will be available in the following files in the 'polynomials' directory: sin_small_ri_outputs_p1, sin_small_ri_outputs_p2, sinsin_ri_outputs_p1, sincos_ri_outputs_p1, sinsin_ri_outputs_p2, and sincos_ri_outputs_p2.
+Upon completion, the coefficients of the five polynomials used for the rounding-invariant outputs sin function will be available in the following files: **sin_small_ri_outputs_p1**, **sin_small_ri_outputs_p2**, **sinsin_ri_outputs_p1**, **sincos_ri_outputs_p1**, **sinsin_ri_outputs_p2**, and **sincos_ri_outputs_p2**.
 
 (c) Rounding-invariant input bounds method
 
@@ -691,12 +721,13 @@ $ cd full-gen/
 $ ./SinSmallInterval.sh
 $ ./Sin-RI-Inputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Sin-RI-Inputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the five polynomials used for the rounding-invariant input bounds sin function will be available in the following files in the 'polynomials' directory: sin_small_ri_inputs_p1, sin_small_ri_inputs_p2, sinsin_ri_inputs_p1, sincos_ri_inputs_p1, sinsin_ri_inputs_p2, and sincos_ri_inputs_p2.
+Upon completion, the coefficients of the five polynomials used for the rounding-invariant input bounds sin function will be available in the following files: **sin_small_ri_inputs_p1**, **sin_small_ri_inputs_p2**, **sinsin_ri_inputs_p1**, **sincos_ri_inputs_p1**, **sinsin_ri_inputs_p2**, and **sincos_ri_inputs_p2**.
 
 (11) Generating intervals and polynomials for sinh\
 (a) Original RLIBM method
@@ -707,12 +738,13 @@ To generate intervals for sinh using the original RLIBM method, run the followin
 $ cd full-gen/
 $ ./Sinh-RLIBM-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Sinh-RLIBM-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the RLIBM sinh function will be available in the following files in the 'polynomials' directory: sinhcos_rlibm and sinhsin_rlibm.
+Upon completion, the coefficients of the two polynomials used for the RLIBM sinh function will be available in the following files: **sinhcos_rlibm** and **sinhsin_rlibm**.
 
 (b) Rounding-invariant outputs method
 
@@ -722,12 +754,13 @@ To generate intervals for sinh using the rounding-invariant outputs method, run 
 $ cd full-gen/
 $ ./Sinh-RI-Outputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Sinh-RI-Outputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs sinh function will be available in the following files in the 'polynomials' directory: sinhcos_ri_outputs and sinhsin_ri_outputs.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs sinh function will be available in the following files: **sinhcos_ri_outputs** and **sinhsin_ri_outputs**.
 
 (c) Rounding-invariant input bounds method
 
@@ -737,12 +770,13 @@ To generate intervals for sinh using the rounding-invariant input bounds method,
 $ cd full-gen/
 $ ./Sinh-RI-Inputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Sinh-RI-Inputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds sinh function will be available in the following files in the 'polynomials' directory: sinhcos_ri_inputs and sinhsin_ri_inputs.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds sinh function will be available in the following files: **sinhcos_ri_inputs** and **sinhsin_ri_inputs**.
 
 (12) Generating intervals and polynomials for sinpi
 
@@ -754,12 +788,13 @@ To generate intervals for sinpi using the original RLIBM method, run the followi
 $ cd full-gen/
 $ ./Sinpi-RLIBM-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Sinpi-RLIBM-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the RLIBM sinpi function will be available in the following files in the 'polynomials' directory: sinpicos_rlibm and sinpisin_rlibm.
+Upon completion, the coefficients of the two polynomials used for the RLIBM sinpi function will be available in the following files: **sinpicos_rlibm** and **sinpisin_rlibm**.
 
 (b) Rounding-invariant outputs method
 
@@ -769,12 +804,13 @@ To generate intervals for sinpi using the rounding-invariant outputs method, run
 $ cd full-gen/
 $ ./Sinpi-RI-Outputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Sinpi-RI-Outputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs sinpi function will be available in the following files in the 'polynomials' directory: sinpicos_ri_outputs and sinpisin_ri_outputs.
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs sinpi function will be available in the following files: **sinpicos_ri_outputs** and **sinpisin_ri_outputs**.
 
 (c) Rounding-invariant input bounds method
 
@@ -784,10 +820,10 @@ To generate intervals for sinpi using the rounding-invariant input bounds method
 $ cd full-gen/
 $ ./Sinpi-RI-Inputs-Intervals.sh
 ```
-After generating the intervals, run the following command in the full-gen directory for the polynomials.
+After generating the intervals, run the following command within the same directory to generate the polynomials.
 
 ```
 $ ./Sinpi-RI-Inputs-Poly.sh
+$ cd ../polynomials/
 ```
-Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds sinpi function will be available in the following files in the 'polynomials' directory: sinpicos_ri_inputs and sinpisin_ri_inputs.
-
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds sinpi function will be available in the following files: **sinpicos_ri_inputs** and **sinpisin_ri_inputs**.
