@@ -122,6 +122,9 @@ This script will take roughly 2 hours. For each function, this script executes t
 
 ## Generation of functions with our approach
 
+We provide detailed information to generate all the functions with our approach. This is primarily for completeness. We don't expect anyone interested other than the library generators to use this approach. 
+The steps include oracle generation, interval and polynomial generation, and packaging the discovered polynomial. If the artifact evaluators want to test out the function generation, just test out the generation process for one function (expf). The process can take up to 4 hours per function. 
+
 We provide scripts to generate the oracle results for all our functions. The oracle generation scripts are expected to complete within roughly 2 hours for all the functions. The size of the oracle file for each function is 32GB. For each function, we also provide scripts to generate intervals and polynomials using the three methods discussed in the paper: the default RLIBM method, the rounding-invariant outputs method, and the rounding-invariant input bounds method (see Interval and Polynomial Generation). 
 
 ### Oracle Generation
