@@ -8,6 +8,6 @@ int main(int argc, char** argv) {
         exit(0);
     }
     unsigned special_cases[] = {0x41b7ee9a};
-    RunTest(argv[1], "Original RLIBM expf without RNE", special_cases);
+    RunTest(argv[1], "Original RLIBM expf with RNE", special_cases);
     return 0;
 }

@@ -8,7 +8,7 @@ int main(int argc, char** argv) {
         exit(0);
     }
     unsigned special_cases[] = {0x3f800000};
-    RunTest(argv[1], "Original RLIBM log2f without RNE", special_cases);
+    RunTest(argv[1], "Original RLIBM log2f with RNE", special_cases);
     return 0;
 }
 

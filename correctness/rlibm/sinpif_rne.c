@@ -8,6 +8,6 @@ int main(int argc, char** argv) {
         exit(0);
     }
     unsigned special_cases[] = {0x3c042416};
-    RunTest(argv[1], "Original RLIBM sinpif without RNE", special_cases);
+    RunTest(argv[1], "Original RLIBM sinpif with RNE", special_cases);
     return 0;
 }

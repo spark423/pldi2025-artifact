@@ -8,6 +8,6 @@ int main(int argc, char** argv) {
         exit(0);
     }
     unsigned special_cases[] = {0x8aea356, 0x23426d13, 0x3f7f1472, 0x3f7f7bf8, 0x4f134f83, 0x7956ba5e};
-    RunTest(argv[1], "Original RLIBM log10f without RNE", special_cases);
+    RunTest(argv[1], "Original RLIBM log10f with RNE", special_cases);
     return 0;
 }

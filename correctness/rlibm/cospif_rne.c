@@ -8,6 +8,6 @@ int main(int argc, char** argv) {
         exit(0);
     }
     unsigned special_cases[] = {};
-    RunTest(argv[1], "Original RLIBM cospif without RNE", special_cases);
+    RunTest(argv[1], "Original RLIBM cospif with RNE", special_cases);
     return 0;
 }
