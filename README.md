@@ -5,7 +5,7 @@ Artifact for the PLDI 2025 paper "Correctly Rounded Math Libraries Without Worry
 ## Abstract:
 
 We present the artifact for our PLDI 2025 paper, "Correctly Rounded
-Math Libraries Without Worrying about the Application␙s Rounding
+Math Libraries Without Worrying about the Application's Rounding
 Mode". We describe the list of claims made by the paper, the
 installation instructions, and evaluation instructions. To ease the
 installation effort, we provide a docker image with all required
