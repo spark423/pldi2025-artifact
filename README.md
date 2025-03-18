@@ -140,7 +140,7 @@ Upon completion, the coefficients of the two polynomials used for the RLIBM exp 
 
 (2) Generating the exp function using the rounding-invariant outputs method
 
-**Note that the oracle generation needs to be done only once. Skip the oracle generation if it has been made for the RLIBM method.**
+**Note that the oracle generation needs to be done only once. Skip the oracle generation (i.e., ExpOracle.sh) if it has been made for the RLIBM method.**
 
 ```
 $ cd ../full-gen/
@@ -153,7 +153,7 @@ Upon completion, the coefficients of the two polynomials used for the rounding-i
 
 (3) Generating the exp function using the rounding-invariant input bounds method
 
-**Note that the oracle generation needs to be done only once. Skip the oracle generation if it has been made for any of the two previous methods.**
+**Note that the oracle generation needs to be done only once. Skip the oracle generation (i.e., ExpOracle.sh) if it has been made for any of the two previous methods.**
 
 ```
 $ cd ../full-gen/
