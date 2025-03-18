@@ -1,10 +1,11 @@
 Artifact for the PLDI 2025 paper "Correctly Rounded Math Libraries Without Worrying about the Application’s Rounding Mode"
 ---
 
+
 ## Abstract:
 
 We present the artifact for our PLDI 2025 paper, "Correctly Rounded
-Math Libraries Without Worrying about the Application’s Rounding
+Math Libraries Without Worrying about the Application␙s Rounding
 Mode". We describe the list of claims made by the paper, the
 installation instructions, and evaluation instructions. To ease the
 installation effort, we provide a docker image with all required
@@ -122,12 +123,50 @@ This script will take roughly 2 hours. For each function, this script executes t
 
 ## Generation of functions with our approach
 
-We provide detailed information to generate all the functions with our approach. This is primarily for completeness. We don't expect anyone interested other than the library generators to use this approach. 
-The steps include oracle generation, interval and polynomial generation, and packaging the discovered polynomial. If the artifact evaluators want to test out the function generation, just test out the generation process for one function (expf). The process can take up to 4 hours per function. 
+We provide detailed information to generate all the functions with our approach. This is primarily for completeness. We don't expect anyone other than the interested library generators to use this approach. The steps include oracle generation, interval and polynomial generation, and packaging the discovered polynomial. The process can take up to 4 hours per function. If the artifact evaluators want to test out the function generation, they can just test out the generation process for one function (exp).
 
-We provide scripts to generate the oracle results for all our functions. The oracle generation scripts are expected to complete within roughly 2 hours for all the functions. The size of the oracle file for each function is 32GB. For each function, we also provide scripts to generate intervals and polynomials using the three methods discussed in the paper: the default RLIBM method, the rounding-invariant outputs method, and the rounding-invariant input bounds method (see Interval and Polynomial Generation). 
+### Generating polynomials for exp
+
+(1) Generating the exp function using the original RLIBM method
+
+```
+$ cd ../full-gen/
+$ ./ExpOracle.sh
+$ ./Exp-RLIBM-Intervals.sh
+$ ./Exp-RLIBM-Poly.sh
+$ cd ../polynomials/
+```
+Upon completion, the coefficients of the two polynomials used for the RLIBM exp function will be available in the following files: **exp_rlibm_p1** and **exp_rlibm_p2**.
+
+(2) Generating the exp function using the rounding-invariant outputs method
+
+**Note that the oracle generation needs to be done only once. Skip the oracle generation if it has been made for the RLIBM method.**
+
+```
+$ cd ../full-gen/
+$ ./ExpOracle.sh
+$ ./Exp-RI-Outputs-Intervals.sh
+$ ./Exp-RI-Outputs-Poly.sh
+$ cd ../polynomials/
+```
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant outputs exp function will be available in the following files: **exp_ri_outputs_p1** and **exp_ri_outputs_p2**.
+
+(3) Generating the exp function using the rounding-invariant input bounds method
+
+**Note that the oracle generation needs to be done only once. Skip the oracle generation if it has been made for any of the two previous methods.**
+
+```
+$ cd ../full-gen/
+$ ./ExpOracle.sh
+$ ./Exp-RI-Inputs-Intervals.sh
+$ ./Exp-RI-Inputs-Poly.sh
+$ cd ../polynomials/
+```
+Upon completion, the coefficients of the two polynomials used for the rounding-invariant input bounds exp function will be available in the following files: **exp_ri_inputs_p1** and **exp_ri_inputs_p2**.
 
 ### Oracle Generation
+
+We provide scripts to generate the oracle results for all our functions. The oracle generation scripts are expected to complete within roughly 2 hours for all the functions. The size of the oracle file for each function is 32GB. For each function, we also provide scripts to generate intervals and polynomials using the three methods discussed in the paper: the default RLIBM method, the rounding-invariant outputs method, and the rounding-invariant input bounds method (see Interval and Polynomial Generation). 
 
 (1) Generating the oracle for cos
 ```
