@@ -130,7 +130,7 @@ We provide detailed information to generate all the functions with our approach.
 (1) Generating the exp function using the original RLIBM method
 
 ```
-$ cd ../full-gen/
+$ cd full-gen/
 $ ./ExpOracle.sh
 $ ./Exp-RLIBM-Intervals.sh
 $ ./Exp-RLIBM-Poly.sh
@@ -143,7 +143,7 @@ Upon completion, the coefficients of the two polynomials used for the RLIBM exp 
 **Note that the oracle generation needs to be done only once. Skip the oracle generation (i.e., ExpOracle.sh) if it has been made for the RLIBM method.**
 
 ```
-$ cd ../full-gen/
+$ cd full-gen/
 $ ./ExpOracle.sh
 $ ./Exp-RI-Outputs-Intervals.sh
 $ ./Exp-RI-Outputs-Poly.sh
@@ -156,7 +156,7 @@ Upon completion, the coefficients of the two polynomials used for the rounding-i
 **Note that the oracle generation needs to be done only once. Skip the oracle generation (i.e., ExpOracle.sh) if it has been made for any of the two previous methods.**
 
 ```
-$ cd ../full-gen/
+$ cd full-gen/
 $ ./ExpOracle.sh
 $ ./Exp-RI-Inputs-Intervals.sh
 $ ./Exp-RI-Inputs-Poly.sh
