@@ -68,6 +68,34 @@ $ sudo docker run -it spark0423/pldi2025artifact
 
 (5) Installation is complete. Go to EVALUATION GUIDE section.
 
+Those who prefer manual installation can take the following steps to obtain the necessary software dependencies.
+
+(1) Install a list of prerequisites via apt install:
+
+```
+$ sudo apt update
+$ sudo apt install -yq --no-install-recommends apt-utils
+$ apt install -yq build-essential parallel cmake git libgmp3-dev libmpfr-dev zlib1g zlib1g-dev bc wget python3 python3-pip python3-matplotlib gcc-13 g++-13 ncurses-term
+
+```
+
+(2) Download and install soplex 4.0.1:
+    
+Please download soplex-4.0.1 from https://soplex.zib.de/index.php#download. Note: Make sure the version you download is soplex-4.0.1.
+
+```
+$ cd soplex-4.0.1
+$ cd build
+$ make
+$ cd ../..
+```
+
+Now, set the environment variable:
+ 
+```
+$ export SOPLEX_PATH=<path to soplex folder>
+```
+
 ---
 
 ## Evaluation Guide
@@ -78,9 +106,9 @@ To test the correctness of our library, run the bash script,
 ```
 $ ./CorrectnessTestOurLibm.sh
 ```
-This script will take roughly 20 minutes. This script tests whether both the rounding-invariant input bounds and rounding-invariant outputs implementations in our library produce the correctly rounded results for uniformly sampled FP inputs with different number of exponent and mantissa bits under all standard rounding modes. If the test is successful, you should see "check" in green text, for each elementary function and representation for each method. Otherwise, it will print "incorrect" in red text, which signifies that the test has failed.
+This script will take roughly 20 minutes. This script tests whether both the rounding-invariant input bounds and rounding-invariant outputs implementations in our library produce the correctly rounded 34 round-to-odd results for uniformly sampled FP32 inputs under all standard rounding modes. If the test is successful, you should see "check" in green text, for each elementary function and for each method. Otherwise, it will print "incorrect" in red text, which signifies that the test has failed.
 
-We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. However, we don't recommend running this for artifact evaluation purposes, as this will take > 4 hours, even when run in parallel...
+We also set up a test script to run this test for ALL possible FP32 inputs. However, we don't recommend running this for artifact evaluation purposes, as this will take > 4 hours, even when run in parallel...
 ```
 $ ./CorrectnessTestFullOurLibm.sh
 ```
@@ -92,7 +120,7 @@ $ ./CorrectnessTestOther.sh
 ```
 This script will take roughly 20 minutes. The testing method is nearly identical to that for our library with the following difference: for functions for which the inputs with incorrect results are known, the inputs are included in the sample. This test corresponds to the columns for CORE-MATH and glibc in Table 1.
 
-We also set up a test script to run this test for ALL possible FP inputs with bit-lengths <= 32. The test is expected to take over 4 hours.
+We also set up a test script to run this test for ALL possible FP32 inputs. The test is expected to take over 4 hours.
 
 ```
 $ ./CorrectnessTestFullOther.sh
@@ -103,7 +131,7 @@ To test the correctness of RLIBM under various rounding modes, both without and 
 ```
 $ ./CorrectnessTestRLIBM.sh
 ```
-This script will take roughly 20 minutes. The testing method is the same as that for CORE-MATH and glibc. To confirm the correctness of RLIBM's functions with respect to all inputs, representations (bit-lengths <= 32), and rounding modes, run the following script.
+This script will take roughly 20 minutes. The testing method is the same as that for CORE-MATH and glibc. To confirm the correctness of RLIBM's functions with respect to all FP32 inputs and rounding modes, run the following script.
 
 ```
 $ ./CorrectnessTestFullRLIBM.sh
