@@ -106,7 +106,7 @@ To test the correctness of our library, run the bash script,
 ```
 $ ./CorrectnessTestOurLibm.sh
 ```
-This script will take roughly 20 minutes. This script tests whether both the rounding-invariant input bounds and rounding-invariant outputs implementations in our library produce the correctly rounded 34 round-to-odd results for uniformly sampled FP32 inputs under all standard rounding modes. If the test is successful, you should see "check" in green text, for each elementary function and for each method. Otherwise, it will print "incorrect" in red text, which signifies that the test has failed.
+This script will take roughly 20 minutes. This script tests whether both the rounding-invariant input bounds and rounding-invariant outputs implementations in our library produce the correctly rounded 34 round-to-odd results for uniformly sampled FP32 inputs under all standard rounding modes. Passing this test confirms that a function avoids double rounding issues when rounding its results to other FP representations. If the test is successful, you should see "check" in green text, for each elementary function and for each method. Otherwise, it will print "incorrect" in red text, which signifies that the test has failed.
 
 We also set up a test script to run this test for ALL possible FP32 inputs. However, we don't recommend running this for artifact evaluation purposes, as this will take > 4 hours, even when run in parallel...
 ```
@@ -146,7 +146,7 @@ To test the speedup of both the rounding-invariant input bounds and outputs meth
 ``` 
 $ ./OverheadTest.sh
 ```
-This script will take roughly 2 hours. For each function, this script executes three different implementations: rounding-invariant input bounds, rounding-invariant outputs, and RLIBM with the fesetround calls. The script executes each implementation on all binary32 FP inputs and collects the aggregate cycles. Once the script terminates, you will see the following file 'speedup_over_rlibm.pdf'. The file contains the contents of Figure 7.
+This script will take roughly 2 hours. For each function, this script executes three different implementations: rounding-invariant input bounds, rounding-invariant outputs, and RLIBM with the fesetround calls. The script executes each implementation on all FP32 inputs and collects the aggregate cycles. Once the script terminates, you will see the following file 'speedup_over_rlibm.pdf'. The file contains the contents of Figure 7.
 
 
 ## Generation of functions with our approach
