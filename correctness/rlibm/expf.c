@@ -1,8 +1,9 @@
 #define __ELEM__ rlibm_expf
 #define __MPFR_ELEM__ mpfr_exp
-#include "LibTestHelper.h"
+#include "LibTestHelperSpecialCases.h"
 
 int main(int argc, char** argv) {
-    RunTest("Original RLIBM expf without RNE");
+    unsigned special_cases[] = {0x41b7ee9a};
+    RunTest("Original RLIBM expf without RNE", special_cases);
     return 0;
 }

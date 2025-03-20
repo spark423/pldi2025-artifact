@@ -23,6 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
 #include <stdint.h>
 #include <errno.h>
 
@@ -111,20 +112,30 @@ float cr_log2f(float x) {
   uint64_t m = ux&(~0u>>9); m <<= 52-23;
   int e = (ux>>23) - 0x7f;
   if (__builtin_expect(ux < 1u<<23 || ux >= 0xffu<<23, 0)) {
-    if (ux==0||ux==(1u<<31)) return -__builtin_inff(); // +0.0 || -0.0
+    if (ux==0||ux==(1u<<31)) { // x = +/-0
+#ifdef CORE_MATH_SUPPORT_ERRNO
+      errno = ERANGE;
+#endif
+      return -1.0f / 0.0f; // should raise 'Divide by zero' exception.
+    }
     uint32_t inf_or_nan = ((ux>>23)&0xff) == 0xff, nan = inf_or_nan && (ux<<9);
-    if (ux>>31 && !nan) return __builtin_nanf("-");
-    if (inf_or_nan) return x;
+    if (ux>>31 && !nan) { // x < 0
+#ifdef CORE_MATH_SUPPORT_ERRNO
+      errno = EDOM;
+#endif
+      return (x - x) / (x - x);  // should raise 'Invalid operation' exception.
+    }
+    if (inf_or_nan) return x + x;
     // subnormal
     int nz = __builtin_clzll(m);
     m <<= nz-11;
-    m &= ~0ul>>12;
+    m &= ~(uint64_t)0>>12;
     e -= nz-12;
   }
   if(__builtin_expect(!m, 0)) return e;
-  int j = (m + (1l<<(52-8)))>>(52-7), k = j>53;
+  int j = (m + ((int64_t)1<<(52-8)))>>(52-7), k = j>53;
   e += k;
-  b64u64_u xd = {.u = m | 0x3fful<<52};
+  b64u64_u xd = {.u = m | (uint64_t)0x3ff<<52};
   double z = __builtin_fma(xd.f, ix[j], -1.0); // z is exact
   static const double c[] =
     {0x1p+0, -0x1p-1, 0x1.55555555030bcp-2, -0x1.ffffffff2b4e5p-3, 0x1.999b5076a42f2p-3, -0x1.55570c45a647dp-3};
@@ -136,3 +147,5 @@ float cr_log2f(float x) {
   const double iln2 = 0x1.71547652b82fep+0;
   return  (z*iln2)*c0 + (e - lix[j]*iln2);
 }
+
+
