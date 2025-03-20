@@ -5,6 +5,3 @@ cd ..
 cd glibc
 make -s clean
 cd ..
-rm -rf results/mlib/*
-rm -rf results/mlib
-
