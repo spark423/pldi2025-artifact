@@ -52,10 +52,6 @@ void RunTestOracle(FILE *f) {
         if (oracleResult.x != roundedResult.x) all_correct = 0;
       }
       if (!all_correct) wrongResults++;
-      if (count%0x100000 == 0) {
-	fprintf(f, "Testing FP%u(8 exp bits): count = 0x%lx, wrong results = %ld\r", bitlen, count, wrongResults);
-	fflush(f);
-      }
     }
     if (wrongResults == 0) {
       printf("FP%u(8 exp bits) -> \033[0;32mcheck\033[0m    \n", bitlen);
