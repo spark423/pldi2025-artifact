@@ -48,7 +48,7 @@ void RunTestOracle(FILE *f) {
 	fesetround(fenv_rnd_modes[rnd_index]);
 	double res = __ELEM__(x.f);
         float_x roundedResult = {.f=RoundDoubleToF8N(res, bitlen, my_rnd_modes[rnd_index])};
-        if (oracleResult.d != oracleResult.d && roundedResult.d != roundedResult.d) continue;
+        if (oracleResult.f != oracleResult.f && roundedResult.f != roundedResult.f) continue;
         if (oracleResult.x != roundedResult.x) all_correct = 0;
       }
       if (!all_correct) wrongResults++;

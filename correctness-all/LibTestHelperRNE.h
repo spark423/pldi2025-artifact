@@ -47,7 +47,7 @@ void RunTestOracle(FILE *f) {
       for (int rnd_index = 0; rnd_index < 4; rnd_index++) {
         float_x oracleResult = {.f=RoundDoubleToF8N(oracle_res, bitlen, my_rnd_modes[rnd_index])};
         float_x roundedResult = {.f=RoundDoubleToF8N(res, bitlen, my_rnd_modes[rnd_index])};
-        if (oracleResult.d != oracleResult.d && roundedResult.d != roundedResult.d) continue;
+        if (oracleResult.f != oracleResult.f && roundedResult.f != roundedResult.f) continue;
         if (oracleResult.x != roundedResult.x) all_correct = 0;
       }
       if (!all_correct) wrongResults++;
