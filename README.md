@@ -106,9 +106,9 @@ To test the correctness of our library, run the bash script,
 ```
 $ ./CorrectnessTestOurLibm.sh
 ```
-This script will take roughly 20 minutes. This script tests whether both the rounding-invariant input bounds and rounding-invariant outputs implementations in our library produce the correctly rounded 34 round-to-odd results for uniformly sampled FP32 inputs under all standard rounding modes. Passing this test confirms that a function avoids double rounding issues when rounding its results to other FP representations. If the test is successful, you should see "check" in green text, for each elementary function and for each method. Otherwise, it will print "incorrect" in red text, which signifies that the test has failed.
+This script will take roughly 5 minutes. This script tests whether both the rounding-invariant input bounds and rounding-invariant outputs implementations in our library produce the correctly rounded results for uniformly sampled FP inputs across multiple FP representations with 8 exponent bits and between 2 and 24 precision bits (i.e., 10 <= bit-length <= 32) under all standard rounding modes. Passing this test confirms that a function avoids double rounding issues when rounding its results to other FP representations. If the test is successful, you should see "check" in green text, for each elementary function and for each method. Otherwise, it will print "incorrect" in red text, which signifies that the test has failed.
 
-We also set up a test script to run this test for ALL possible FP32 inputs. However, we don't recommend running this for artifact evaluation purposes, as this will take > 4 hours, even when run in parallel...
+We also set up a test script to run this test for ALL possible inputs across all FP representations with 8 exponent bits and bit-lengths between 10 and 32. However, we don't recommend running this for artifact evaluation purposes, as this will take > 9 hours, even when run in parallel...
 ```
 $ ./CorrectnessTestFullOurLibm.sh
 ```
@@ -118,9 +118,9 @@ To test the correctness of mainstream math libraries (e.g., CORE-MATH and glibc)
 ```
 $ ./CorrectnessTestOther.sh
 ```
-This script will take roughly 20 minutes. The testing method is nearly identical to that for our library with the following difference: for functions for which the inputs with incorrect results are known, the inputs are included in the sample. This test corresponds to the columns for CORE-MATH and glibc in Table 1.
+This script will take roughly 5 minutes. The testing method is nearly identical to that for our library with the following difference: for functions for which the inputs with incorrect results are known, the inputs are included in the sample. This test corresponds to the columns for CORE-MATH and glibc in Table 1.
 
-We also set up a test script to run this test for ALL possible FP32 inputs. The test is expected to take over 4 hours.
+We also set up a test script to run this test for ALL possible inputs across all FP representations with 8 exponent bits and bit-lengths between 10 and 32. The test is expected to take over 9 hours.
 
 ```
 $ ./CorrectnessTestFullOther.sh
@@ -131,13 +131,13 @@ To test the correctness of RLIBM under various rounding modes, both without and 
 ```
 $ ./CorrectnessTestRLIBM.sh
 ```
-This script will take roughly 20 minutes. The testing method is the same as that for CORE-MATH and glibc. To confirm the correctness of RLIBM's functions with respect to all FP32 inputs and rounding modes, run the following script.
+This script will take roughly 5 minutes. The testing method is the same as that for CORE-MATH and glibc. To confirm the correctness of RLIBM's functions with respect to all FP inputs with bit-lengths between 10 and 32 under all standard rounding modes, run the following script.
 
 ```
 $ ./CorrectnessTestFullRLIBM.sh
 ```
 
-As is the case with the other full-scale tests, the test is expected to take over 4 hours.
+As is the case with the other full-scale tests, the test is expected to take over 9 hours.
 
 (4) Check the performance of our library against RLIBM with rounding mode changes (Claim 4):
 
