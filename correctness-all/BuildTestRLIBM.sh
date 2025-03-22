@@ -1,6 +1,5 @@
 #!/bin/bash
 cd ../libm
-make -s clean
 make -s
 cd ../correctness-all
 cd rlibm
